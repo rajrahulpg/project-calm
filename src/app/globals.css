@@ -1,0 +1,326 @@
+@import "tailwindcss";
+
+/* Light is the default theme. Dark is opt-in via [data-theme="dark"] on
+   <html> (see ThemeToggle.tsx), which overrides this block by specificity. */
+/* Brand blue palette (#00A9E4, sampled from the brand's own wave graphic
+   and headline treatment) on cool, faintly ice-blue neutrals.
+   --color-coral is kept as the accent token name so every component that
+   already references it repaints automatically.
+   --color-coral-tint  : soft fill behind icons / selected states
+   --color-coral-glow  : coloured drop-shadow for lifted cards & CTAs
+   --color-on-accent   : text/icon colour on top of a solid accent fill */
+@theme {
+  --color-bg-0:        #F5FAFC;
+  --color-bg-1:        #EAF3F8;
+  --color-bg-2:        #DCE9F0;
+  --color-text:        #10222E;
+  --color-text-muted:  #566B78;
+  --color-heading:     #3DBEEA;
+  --color-coral:       #00A9E4;
+  --color-coral-soft:  #00A9E440;
+  --color-coral-tint:  #00A9E41A;
+  --color-coral-glow:  #00A9E499;
+  --color-on-accent:   #FFFFFF;
+  --color-line:        #10222E1A;
+  --color-card:        #10222E0A;
+  --bg-photo-opacity:  0.44;
+}
+
+/* --font-sans and --font-display are supplied by next/font (see layout.tsx),
+   scoped as CSS variables on <html>. */
+
+/* Vertical section rhythm. Most sections share one of these three padding
+   sizes verbatim (120px/130px/100px top+bottom) with no mobile reduction,
+   which reads as excess empty space above and below every section on a
+   phone screen. Routing them through variables here — rather than a fixed
+   px value baked into each component — means every section shrinks on
+   small screens from a single place. */
+:root {
+  --section-py: 64px;
+  --section-py-lg: 72px;
+  --section-py-sm: 56px;
+}
+@media (min-width: 640px) {
+  :root {
+    --section-py: 120px;
+    --section-py-lg: 130px;
+    --section-py-sm: 100px;
+  }
+}
+
+/* The accent lightens a step in dark mode so small blue text still clears
+   contrast against the near-black surfaces. */
+:root[data-theme="dark"] {
+  --color-bg-0:        #0B1620;
+  --color-bg-1:        #14212C;
+  --color-bg-2:        #1C2F3D;
+  --color-text:        #EFF6FA;
+  --color-text-muted:  #A9BAC5;
+  --color-heading:     #3DBEEA;
+  --color-coral:       #4FC8F0;
+  --color-coral-soft:  #4FC8F040;
+  --color-coral-tint:  #4FC8F01F;
+  --color-coral-glow:  #4FC8F099;
+  --color-on-accent:   #FFFFFF;
+  --color-line:        #FFFFFF17;
+  --color-card:        #FFFFFF0A;
+  --bg-photo-opacity:  0.32;
+}
+
+/* ── Brand moments ───────────────────────────────────────────────────── */
+.band-accent {
+  background:
+    radial-gradient(90% 120% at 85% 0%, rgba(255,255,255,0.14) 0%, transparent 60%),
+    linear-gradient(135deg, #0087B8 0%, #00A9E4 55%, #3FD0F5 100%);
+  color: #FFFFFF;
+}
+
+.text-gradient-accent {
+  background: linear-gradient(115deg, var(--color-text) 0%, var(--color-text) 48%, var(--color-coral) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.btn-accent {
+  background: linear-gradient(135deg, #0087B8 0%, var(--color-coral) 55%, #3FD0F5 100%);
+  color: #FFFFFF;
+  box-shadow: 0 16px 32px -16px var(--color-coral-glow);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s;
+}
+.btn-accent:hover { transform: translateY(-2px); box-shadow: 0 22px 40px -18px var(--color-coral-glow); }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+body {
+  background-color: var(--color-bg-0);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+::selection { background: var(--color-coral); color: var(--color-on-accent); }
+
+::-webkit-scrollbar        { width: 3px; }
+::-webkit-scrollbar-track  { background: var(--color-bg-0); }
+::-webkit-scrollbar-thumb  { background: var(--color-coral); border-radius: 2px; }
+
+:focus-visible {
+  outline: 2px solid var(--color-coral);
+  outline-offset: 3px;
+}
+
+/* ── Lenis smooth scroll (see SmoothScroll.tsx) ──────────────────────── */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* Kept small: the layer only needs to cover the viewport plus the ±3%
+   jitter, and a 200% layer was 4× the GPU memory for no visible gain. */
+.grain-overlay {
+  position: fixed; inset: -10%; width: 120%; height: 120%;
+  pointer-events: none; z-index: 40; opacity: 0.018;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  animation: grain-shift 0.7s steps(2) infinite;
+  will-change: transform;
+}
+
+@keyframes grain-shift {
+  0%   { transform: translate(0,0); }  20%  { transform: translate(-2%,-3%); }
+  40%  { transform: translate(3%,1%); } 60%  { transform: translate(-1%,3%); }
+  80%  { transform: translate(2%,-2%); } 100% { transform: translate(-3%,1%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain-overlay { animation: none; }
+}
+
+/* ── Scroll reveal primitive (see SectionReveal.tsx) ────────────────── */
+/* Opacity + transform only — both run on the compositor. The earlier blur()
+   transition forced a repaint every frame for each revealing block, which
+   showed up as scroll stutter on text-heavy sections. */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transition: opacity 0.3s ease;
+    transform: none;
+  }
+}
+
+/* ── Breathing animation (emotional section) ─────────────────────────── */
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 0.35; }
+  50%      { transform: scale(1.12); opacity: 0.55; }
+}
+.breathe-shape { animation: breathe 7s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .breathe-shape { animation: none; }
+}
+
+/* ── Checklist check animation ───────────────────────────────────────── */
+@keyframes check-pop {
+  0%   { transform: scale(0.6); opacity: 0; }
+  60%  { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.check-pop { animation: check-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+/* ── Route transition ────────────────────────────────────────────────── */
+.route-transition {
+  animation: route-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes route-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-transition { animation: none; }
+}
+
+.max-prose { max-width: 68ch; }
+
+/* ── Perfect-score celebration (Myth vs Fact quiz) ───────────────────── */
+@keyframes sparkle-pop {
+  0%   { opacity: 0; transform: scale(0) rotate(var(--sparkle-rot, 0deg)); }
+  30%  { opacity: 1; transform: scale(1) rotate(var(--sparkle-rot, 0deg)); }
+  100% { opacity: 0; transform: scale(0.5) translateY(-26px) rotate(var(--sparkle-rot, 0deg)); }
+}
+.sparkle-pop { animation: sparkle-pop 1.3s ease-out forwards; }
+
+@keyframes celebrate-pop {
+  0%   { opacity: 0; transform: scale(0.85) translateY(6px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+.celebrate-pop { animation: celebrate-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+
+@media (prefers-reduced-motion: reduce) {
+  .sparkle-pop { display: none; }
+  .celebrate-pop { animation: none; }
+}
+
+/* ── Hero backdrops (ECG trace / support network) ────────────────────── */
+@keyframes ecg-run { from { stroke-dashoffset: 1300; } to { stroke-dashoffset: 0; } }
+.ecg-trace { stroke-dasharray: 260 1040; animation: ecg-run 7s linear infinite; }
+
+@keyframes drift-a { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(8px, -10px); } }
+@keyframes drift-b { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-10px, 6px); } }
+@keyframes drift-c { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(6px, 9px); } }
+.drift-a { animation: drift-a 9s ease-in-out infinite; }
+.drift-b { animation: drift-b 11s ease-in-out infinite; }
+.drift-c { animation: drift-c 13s ease-in-out infinite; }
+
+/* ── Aurora blobs (slow ambient colour drift) ────────────────────────── */
+@keyframes aurora-a { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(6%, -8%) scale(1.15); } }
+@keyframes aurora-b { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(-8%, 6%) scale(0.9); } }
+/* A radial gradient instead of filter: blur() — same soft glow, but a blur
+   this large is re-applied every frame while the blob moves, which was the
+   single biggest cost on the Resources page. */
+.aurora-blob {
+  position: absolute; border-radius: 50%; pointer-events: none; will-change: transform;
+  background: radial-gradient(circle at center, var(--color-coral) 0%, color-mix(in srgb, var(--color-coral) 40%, transparent) 35%, transparent 68%);
+}
+.aurora-a { animation: aurora-a 18s ease-in-out infinite; }
+.aurora-b { animation: aurora-b 22s ease-in-out infinite; }
+
+/* ── Pulsing ring around an active node / hotspot ────────────────────── */
+@keyframes node-pulse { 0% { transform: scale(1); opacity: 0.7; } 100% { transform: scale(2.2); opacity: 0; } }
+.node-pulse { animation: node-pulse 2s ease-out infinite; }
+
+/* ── Stroke draw-in for SVG paths (set pathLength="600" on the path) ─── */
+@keyframes draw-in { from { stroke-dashoffset: 600; } to { stroke-dashoffset: 0; } }
+.draw-in { stroke-dasharray: 600; animation: draw-in 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+@keyframes chip-pop { 0% { transform: scale(0.94); } 60% { transform: scale(1.04); } 100% { transform: scale(1); } }
+.chip-pop { animation: chip-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+@keyframes eq-bounce { 0%, 100% { transform: scaleY(0.35); } 50% { transform: scaleY(1); } }
+.eq-bar { transform-origin: bottom; animation: eq-bounce 1.1s ease-in-out infinite; }
+
+/* Shimmer rides on a translated pseudo-element (compositor-only) rather than
+   an animated background-position, which repaints on every frame. */
+@keyframes shimmer { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+.shimmer { position: relative; overflow: hidden; background: var(--color-line); }
+.shimmer::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent 0%, var(--color-bg-2) 50%, transparent 100%);
+  animation: shimmer 2.4s linear infinite; animation-delay: inherit;
+  will-change: transform;
+}
+
+/* ── Animated expand/collapse without measuring heights ──────────────── */
+.expand-grid { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.45s cubic-bezier(0.16, 1, 0.3, 1); }
+.expand-grid[data-open="true"] { grid-template-rows: 1fr; }
+.expand-grid > div { overflow: hidden; min-height: 0; }
+
+/* ── Book cover (Coffee Table Book section) — a static cover with a
+   pointer-tracked tilt; the page-turning happens in the reader popup. ── */
+.book-scene { perspective: 1400px; }
+.book { position: relative; transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+
+.tilt-card {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s, box-shadow 0.5s;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* ── Heartbeat on the body-map heart ─────────────────────────────────── */
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  14%      { transform: scale(1.14); }
+  28%      { transform: scale(1); }
+  42%      { transform: scale(1.08); }
+  70%      { transform: scale(1); }
+}
+.heartbeat { animation: heartbeat 1.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+
+/* ── Pointer parallax layers (hero backdrops) ────────────────────────── */
+.parallax-layer { transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform; }
+
+/* ── Modal ───────────────────────────────────────────────────────────── */
+@keyframes modal-fade { from { opacity: 0; } to { opacity: 1; } }
+.modal-fade { animation: modal-fade 0.3s ease-out; }
+
+/* The reader fades gently into view — a hinge/swing entrance read as
+   fussy against the page-turn animation already happening inside it. */
+@keyframes book-pop {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.book-pop { animation: book-pop 0.45s ease-out; }
+
+/* ── Carousel track ──────────────────────────────────────────────────── */
+.carousel-track { transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ecg-trace, .drift-a, .drift-b, .drift-c, .aurora-a, .aurora-b, .node-pulse, .eq-bar, .shimmer::after, .chip-pop, .heartbeat, .modal-fade, .book-pop { animation: none; }
+  .draw-in { animation: none; stroke-dasharray: none; }
+  .expand-grid, .book, .tilt-card, .parallax-layer, .carousel-track { transition: none; }
+}
