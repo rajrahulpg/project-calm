@@ -49,6 +49,36 @@ export default function ScrollVideo() {
     videoRef.current?.play().catch(() => setNeedsPlayButton(true));
   }, [reducedMotion]);
 
+  // ── Force the first frame to paint ──────────────────────────────────
+  // Some mobile browsers (notably iOS Safari on cellular, or with data
+  // saver on) never decode a single frame from a muted, non-playing
+  // <video> — even with preload="auto" and metadata loaded — until either
+  // `.play()` runs once or the visitor scrolls (which is what makes the
+  // scroll-driven seeks below start actually landing). A muted+playsInline
+  // video is allowed to autoplay without a gesture, so kicking off a
+  // play-then-immediately-pause here is a safe, standard trick to force
+  // that first paint instead of leaving a blank frame until scroll starts.
+  useEffect(() => {
+    if (reducedMotion) return;
+    const video = videoRef.current;
+    if (!video) return;
+    video.load();
+    const kick = () => {
+      video.play()
+        .then(() => video.pause())
+        .catch(() => {
+          // Autoplay was blocked entirely — the scroll-driven seek loop
+          // below will still paint a frame as soon as the visitor scrolls.
+        });
+    };
+    if (video.readyState >= 2) {
+      kick();
+    } else {
+      video.addEventListener("loadeddata", kick, { once: true });
+      return () => video.removeEventListener("loadeddata", kick);
+    }
+  }, [reducedMotion]);
+
   // ── Scroll-driven text timeline + video scrubbing ───────────────────
   useEffect(() => {
     if (reducedMotion) return;
