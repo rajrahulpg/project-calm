@@ -64,7 +64,7 @@ export default function ToolsGrid() {
           </h2>
         </SectionReveal>
 
-        <div id="talk-to-someone" className="grid sm:grid-cols-2 gap-6">
+        <div id="talk-to-someone" className="grid grid-cols-2 gap-3 sm:gap-6">
           {t.TOOLS.map((tool, i) => {
             const Icon = ICONS[tool.key];
             const isOpen = openKey === tool.key;
@@ -72,7 +72,7 @@ export default function ToolsGrid() {
             return (
               <SectionReveal key={tool.key} delay={i * 100}>
                 <div
-                  className="group rounded-2xl p-8 transition-all duration-500 hover:-translate-y-1"
+                  className="group rounded-2xl p-4 sm:p-8 transition-all duration-500 hover:-translate-y-1"
                   style={{
                     background: isOpen ? "var(--color-coral-tint)" : "var(--color-card)",
                     border: `1px solid ${isOpen ? "var(--color-coral)" : "var(--color-line)"}`,
@@ -86,12 +86,12 @@ export default function ToolsGrid() {
                     onClick={() => setOpenKey(isOpen ? null : tool.key)}
                     className="w-full text-left"
                   >
-                    <span className="flex items-start justify-between gap-4 mb-6">
+                    <span className="flex items-start justify-between gap-4 mb-3 sm:mb-6">
                       <span
                         className="flex items-center justify-center rounded-full transition-all duration-500 group-hover:scale-110"
-                        style={{ width: 52, height: 52, background: isOpen ? "var(--color-coral)" : "var(--color-coral-tint)" }}
+                        style={{ width: 40, height: 40, background: isOpen ? "var(--color-coral)" : "var(--color-coral-tint)" }}
                       >
-                        <Icon size={23} color={isOpen ? "var(--color-on-accent)" : "var(--color-coral)"} strokeWidth={1.75} />
+                        <Icon size={19} color={isOpen ? "var(--color-on-accent)" : "var(--color-coral)"} strokeWidth={1.75} />
                       </span>
                       <ChevronDown
                         size={18}
@@ -99,10 +99,10 @@ export default function ToolsGrid() {
                         style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.4s cubic-bezier(0.16,1,0.3,1)" }}
                       />
                     </span>
-                    <h3 className="text-lg font-medium mb-2" style={{ color: "var(--color-text)" }}>
+                    <h3 className="text-sm sm:text-lg font-medium mb-1 sm:mb-2" style={{ color: "var(--color-text)" }}>
                       {tool.title}
                     </h3>
-                    <p className="text-sm leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
+                    <p className="text-xs sm:text-sm leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
                       {tool.body}
                     </p>
                   </button>

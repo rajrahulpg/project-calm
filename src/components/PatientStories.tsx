@@ -48,7 +48,7 @@ export default function PatientStories() {
           </p>
         </SectionReveal>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
           {PATIENT_STORIES.placeholders.map((n, i) => (
             <SectionReveal key={n} delay={i * 100}>
               <div
@@ -56,7 +56,7 @@ export default function PatientStories() {
                 tabIndex={0}
                 aria-haspopup="dialog"
                 aria-label={`${PATIENT_STORIES.title} ${n}`}
-                className="tilt-card h-full rounded-2xl p-8 flex flex-col cursor-pointer"
+                className="tilt-card h-full rounded-2xl p-4 sm:p-8 flex flex-col cursor-pointer"
                 style={{ background: "var(--color-card)", border: "1px solid var(--color-line)" }}
                 onMouseMove={onMove}
                 onMouseLeave={onLeave}
@@ -64,12 +64,12 @@ export default function PatientStories() {
                 onKeyDown={(e) => onKeyDown(e, n)}
               >
                 <span
-                  className="inline-flex items-center justify-center rounded-full mb-6"
-                  style={{ width: 48, height: 48, background: "var(--color-coral-tint)" }}
+                  className="inline-flex items-center justify-center rounded-full mb-3 sm:mb-6"
+                  style={{ width: 40, height: 40, background: "var(--color-coral-tint)" }}
                 >
-                  <Quote size={20} color="var(--color-coral)" strokeWidth={1.75} />
+                  <Quote size={18} color="var(--color-coral)" strokeWidth={1.75} />
                 </span>
-                <div className="flex-1 flex flex-col gap-2.5 mb-8">
+                <div className="flex-1 flex flex-col gap-2 sm:gap-2.5 mb-4 sm:mb-8">
                   <div className="shimmer h-2.5 w-full rounded-full" />
                   <div className="shimmer h-2.5 w-full rounded-full" style={{ animationDelay: "0.3s" }} />
                   <div className="shimmer h-2.5 w-3/4 rounded-full" style={{ animationDelay: "0.6s" }} />

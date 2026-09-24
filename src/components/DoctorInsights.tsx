@@ -25,7 +25,7 @@ export default function DoctorInsights() {
           </p>
         </SectionReveal>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
           {DOCTOR_INSIGHTS.placeholders.map((n, i) => (
             <SectionReveal key={n} delay={i * 90}>
               <button

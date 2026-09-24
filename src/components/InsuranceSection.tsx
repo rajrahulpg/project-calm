@@ -15,26 +15,26 @@ function QuestionList({ title, questions, icon: Icon, asked, onToggle, askedLabe
 }) {
   const askedCount = Object.values(asked).filter(Boolean).length;
   return (
-    <div className="rounded-2xl p-7 sm:p-9 h-full flex flex-col" style={{ background: "var(--color-card)", border: "1px solid var(--color-line)" }}>
-      <div className="flex items-center gap-4 mb-6">
-        <span className="shrink-0 flex items-center justify-center rounded-full" style={{ width: 44, height: 44, background: "var(--color-coral-tint)" }}>
-          <Icon size={20} color="var(--color-coral)" strokeWidth={1.75} />
+    <div className="rounded-2xl p-4 sm:p-9 h-full flex flex-col" style={{ background: "var(--color-card)", border: "1px solid var(--color-line)" }}>
+      <div className="flex items-center gap-2.5 sm:gap-4 mb-3 sm:mb-6">
+        <span className="shrink-0 flex items-center justify-center rounded-full" style={{ width: 36, height: 36, background: "var(--color-coral-tint)" }}>
+          <Icon size={17} color="var(--color-coral)" strokeWidth={1.75} />
         </span>
         <div className="min-w-0">
-          <h3 className="text-lg font-medium leading-snug" style={{ color: "var(--color-text)" }}>
+          <h3 className="text-sm sm:text-lg font-medium leading-snug" style={{ color: "var(--color-text)" }}>
             {title}
           </h3>
-          <span className="text-xs tabular-nums" style={{ color: "var(--color-text-muted)" }}>
+          <span className="text-[11px] sm:text-xs tabular-nums" style={{ color: "var(--color-text-muted)" }}>
             {askedLabel(askedCount, questions.length)}
           </span>
         </div>
       </div>
 
-      <div className="h-1 rounded-full overflow-hidden mb-6" style={{ background: "var(--color-line)" }}>
+      <div className="h-1 rounded-full overflow-hidden mb-3 sm:mb-6" style={{ background: "var(--color-line)" }}>
         <div className="h-full rounded-full" style={{ width: `${(askedCount / questions.length) * 100}%`, background: "var(--color-coral)", transition: "width 0.5s cubic-bezier(0.16, 1, 0.3, 1)" }} />
       </div>
 
-      <ul className="flex flex-col gap-2.5">
+      <ul className="flex flex-col gap-1.5 sm:gap-2.5">
         {questions.map((q, i) => {
           const isAsked = !!asked[i];
           return (
@@ -44,16 +44,16 @@ function QuestionList({ title, questions, icon: Icon, asked, onToggle, askedLabe
                 role="checkbox"
                 aria-checked={isAsked}
                 onClick={() => onToggle(i)}
-                className="w-full flex items-start gap-3.5 p-3.5 rounded-xl text-left transition-all duration-300 hover:-translate-y-0.5"
+                className="w-full flex items-start gap-2 sm:gap-3.5 p-2 sm:p-3.5 rounded-xl text-left transition-all duration-300 hover:-translate-y-0.5"
                 style={{ background: isAsked ? "var(--color-coral-tint)" : "transparent", border: `1px solid ${isAsked ? "var(--color-coral-soft)" : "transparent"}` }}
               >
                 <span
                   className="shrink-0 mt-0.5 flex items-center justify-center rounded-full transition-colors duration-300"
-                  style={{ width: 20, height: 20, border: `1.5px solid ${isAsked ? "var(--color-coral)" : "var(--color-text-muted)"}`, background: isAsked ? "var(--color-coral)" : "transparent" }}
+                  style={{ width: 18, height: 18, border: `1.5px solid ${isAsked ? "var(--color-coral)" : "var(--color-text-muted)"}`, background: isAsked ? "var(--color-coral)" : "transparent" }}
                 >
-                  {isAsked && <Check size={12} color="var(--color-on-accent)" strokeWidth={3} className="check-pop" />}
+                  {isAsked && <Check size={11} color="var(--color-on-accent)" strokeWidth={3} className="check-pop" />}
                 </span>
-                <span className="text-sm sm:text-[15px] leading-relaxed" style={{ color: isAsked ? "var(--color-text-muted)" : "var(--color-text)", textDecoration: isAsked ? "line-through" : "none" }}>
+                <span className="text-xs sm:text-[15px] leading-relaxed" style={{ color: isAsked ? "var(--color-text-muted)" : "var(--color-text)", textDecoration: isAsked ? "line-through" : "none" }}>
                   {q}
                 </span>
               </button>
@@ -83,7 +83,7 @@ export default function InsuranceSection() {
           </p>
         </SectionReveal>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-2 gap-3 sm:gap-6">
           <SectionReveal>
             <QuestionList
               title={INSURANCE_SECTION.insurer.title}
