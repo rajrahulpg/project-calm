@@ -22,7 +22,7 @@ export default function StatBand({ sectionKey }: { sectionKey: "STATS_BY_NUMBERS
         />
         <div
           className="absolute inset-0"
-          style={{ background: "linear-gradient(135deg, rgba(0,135,184,0.55) 0%, rgba(0,169,228,0.45) 55%, rgba(63,208,245,0.35) 100%)" }}
+          style={{ background: "linear-gradient(135deg, rgba(184,0,31,0.55) 0%, rgba(234,0,41,0.45) 55%, rgba(239,64,95,0.35) 100%)" }}
         />
       </div>
       <div className="relative max-w-6xl mx-auto px-6 md:px-12">

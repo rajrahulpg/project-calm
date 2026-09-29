@@ -2,27 +2,26 @@
 
 /* Light is the default theme. Dark is opt-in via [data-theme="dark"] on
    <html> (see ThemeToggle.tsx), which overrides this block by specificity. */
-/* Brand blue palette (#00A9E4, sampled from the brand's own wave graphic
-   and headline treatment) on cool, faintly ice-blue neutrals.
+/* Brand palette: Pantone 185 C (#EA0029) on Cool Grey 8C (#898A8D) neutrals.
    --color-coral is kept as the accent token name so every component that
    already references it repaints automatically.
    --color-coral-tint  : soft fill behind icons / selected states
    --color-coral-glow  : coloured drop-shadow for lifted cards & CTAs
    --color-on-accent   : text/icon colour on top of a solid accent fill */
 @theme {
-  --color-bg-0:        #F5FAFC;
-  --color-bg-1:        #EAF3F8;
-  --color-bg-2:        #DCE9F0;
-  --color-text:        #10222E;
-  --color-text-muted:  #566B78;
-  --color-heading:     #3DBEEA;
-  --color-coral:       #00A9E4;
-  --color-coral-soft:  #00A9E440;
-  --color-coral-tint:  #00A9E41A;
-  --color-coral-glow:  #00A9E499;
+  --color-bg-0:        #F7F7F8;
+  --color-bg-1:        #EFEFF0;
+  --color-bg-2:        #E2E2E4;
+  --color-text:        #1C1C1E;
+  --color-text-muted:  #898A8D;
+  --color-heading:     #EA0029;
+  --color-coral:       #EA0029;
+  --color-coral-soft:  #EA002940;
+  --color-coral-tint:  #EA00291A;
+  --color-coral-glow:  #EA002999;
   --color-on-accent:   #FFFFFF;
-  --color-line:        #10222E1A;
-  --color-card:        #10222E0A;
+  --color-line:        #1C1C1E1A;
+  --color-card:        #1C1C1E0A;
   --bg-photo-opacity:  0.44;
 }
 
@@ -48,19 +47,19 @@
   }
 }
 
-/* The accent lightens a step in dark mode so small blue text still clears
+/* The accent lightens a step in dark mode so small red text still clears
    contrast against the near-black surfaces. */
 :root[data-theme="dark"] {
-  --color-bg-0:        #0B1620;
-  --color-bg-1:        #14212C;
-  --color-bg-2:        #1C2F3D;
-  --color-text:        #EFF6FA;
-  --color-text-muted:  #A9BAC5;
-  --color-heading:     #3DBEEA;
-  --color-coral:       #4FC8F0;
-  --color-coral-soft:  #4FC8F040;
-  --color-coral-tint:  #4FC8F01F;
-  --color-coral-glow:  #4FC8F099;
+  --color-bg-0:        #17181A;
+  --color-bg-1:        #202124;
+  --color-bg-2:        #2A2B2E;
+  --color-text:        #F4F4F5;
+  --color-text-muted:  #9B9C9E;
+  --color-heading:     #F15974;
+  --color-coral:       #F15974;
+  --color-coral-soft:  #F1597440;
+  --color-coral-tint:  #F159741F;
+  --color-coral-glow:  #F1597499;
   --color-on-accent:   #FFFFFF;
   --color-line:        #FFFFFF17;
   --color-card:        #FFFFFF0A;
@@ -71,7 +70,7 @@
 .band-accent {
   background:
     radial-gradient(90% 120% at 85% 0%, rgba(255,255,255,0.14) 0%, transparent 60%),
-    linear-gradient(135deg, #0087B8 0%, #00A9E4 55%, #3FD0F5 100%);
+    linear-gradient(135deg, #B8001F 0%, #EA0029 55%, #EF405F 100%);
   color: #FFFFFF;
 }
 
@@ -83,7 +82,7 @@
 }
 
 .btn-accent {
-  background: linear-gradient(135deg, #0087B8 0%, var(--color-coral) 55%, #3FD0F5 100%);
+  background: linear-gradient(135deg, #B8001F 0%, var(--color-coral) 55%, #EF405F 100%);
   color: #FFFFFF;
   box-shadow: 0 16px 32px -16px var(--color-coral-glow);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s;
