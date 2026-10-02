@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { PhoneCall } from "lucide-react";
 import { useLanguage } from "@/lib/language";
 import { useHorizontalTraceMask, usePrefersReducedMotion } from "@/lib/hooks";
@@ -13,6 +14,7 @@ import { ECG_D_THIN } from "./HeroBackdrop";
 export default function Footer() {
   const { t } = useLanguage();
   const { UI } = t;
+  const pathname = usePathname();
   const reducedMotion = usePrefersReducedMotion();
   const bandRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
@@ -20,11 +22,14 @@ export default function Footer() {
 
   return (
     <footer style={{ background: "var(--color-bg-1)", borderTop: "1px solid var(--color-line)" }}>
-      <div className="max-w-6xl mx-auto px-6 md:px-12 pt-10 sm:pt-12 text-center">
-        <p className="whitespace-pre-line text-xs leading-relaxed" style={{ color: "var(--color-text-muted)", opacity: 0.85 }}>
-          {t.FOOTER_LEGAL_NOTICE}
-        </p>
-      </div>
+      {/* Legal notice only on the last page (Resources). */}
+      {pathname === "/resources" && (
+        <div className="max-w-6xl mx-auto px-6 md:px-12 pt-10 sm:pt-12 text-center">
+          <p className="whitespace-pre-line text-xs leading-relaxed" style={{ color: "var(--color-text-muted)", opacity: 0.85 }}>
+            {t.FOOTER_LEGAL_NOTICE}
+          </p>
+        </div>
+      )}
 
       {/* overflow-x-auto is a safety net, not the intended path: below ~360px
           (older/smaller phones) the logo + controls no longer all fit on one
