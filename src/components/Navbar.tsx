@@ -45,9 +45,17 @@ export default function Navbar() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", measure, { passive: true });
+    // #story settles its height after hydration (it shrinks on mobile), so
+    // re-measure when the page's size changes, not just on window resize.
+    const ro = new ResizeObserver(() => {
+      measure();
+      onScroll();
+    });
+    ro.observe(document.body);
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", measure);
+      ro.disconnect();
     };
   }, []);
 

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { PhoneCall } from "lucide-react";
 import { useLanguage } from "@/lib/language";
 import { useHorizontalTraceMask, usePrefersReducedMotion } from "@/lib/hooks";
-import SiteLogo from "./SiteLogo";
+import SiteLogo, { SiteHashtag } from "./SiteLogo";
 import LanguageToggle from "./LanguageToggle";
 import ThemeToggle from "./ThemeToggle";
 import { ECG_D_THIN } from "./HeroBackdrop";
@@ -31,9 +31,13 @@ export default function Footer() {
           row at readable sizes, so this lets that row scroll instead of
           breaking the page layout. Every mainstream phone width renders it
           with no scrolling. */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-12 pt-8 sm:pt-10 pb-10 sm:pb-14 flex flex-row items-center justify-between gap-3 sm:gap-8 overflow-x-auto">
-        <Link href="/" className="inline-flex items-center shrink-0">
+      {/* Below 380px (360px Androids) the logo + hashtag stack above the
+          controls instead of sharing the row. */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-12 pt-8 sm:pt-10 pb-10 sm:pb-14 flex flex-row max-[379px]:flex-col items-center justify-between gap-3 max-[379px]:gap-5 sm:gap-8 overflow-x-auto">
+        <Link href="/" className="inline-flex flex-col items-start max-[379px]:items-center shrink-0">
           <SiteLogo className="h-6 sm:h-10 w-auto" />
+          {/* Smaller on phones so the logo + controls row still fits. */}
+          <SiteHashtag className="!text-[8.5px] sm:!text-xs" />
         </Link>
 
         <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">

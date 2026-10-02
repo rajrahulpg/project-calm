@@ -45,6 +45,10 @@ export const HERO = {
   scrollHint: "Scroll to understand",
 };
 
+export const HASHTAG_REVEAL = {
+  caption: "Every heart is different. So is every blockage.",
+};
+
 export const CONDITION_INTRO = {
   title: "Understanding the Condition",
   subtitle: "What Is a Calcium Blockage",

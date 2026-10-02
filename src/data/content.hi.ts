@@ -48,6 +48,10 @@ export const HERO = {
   scrollHint: "समझने के लिए स्क्रॉल करें",
 };
 
+export const HASHTAG_REVEAL = {
+  caption: "हर दिल अलग होता है। हर ब्लॉकेज भी।",
+};
+
 export const CONDITION_INTRO = {
   title: "इस स्थिति को समझें",
   subtitle: "कैल्शियम ब्लॉकेज क्या है",

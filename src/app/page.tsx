@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import ScrollVideo from "@/components/ScrollVideo";
+import HashtagReveal from "@/components/HashtagReveal";
 import ConditionIntro from "@/components/ConditionIntro";
 import AnatomySection from "@/components/AnatomySection";
 import RiskCards from "@/components/RiskCards";
@@ -12,6 +13,7 @@ export default function Home() {
     <main>
       <Navbar />
       <ScrollVideo />
+      <HashtagReveal />
       <ConditionIntro />
       <AnatomySection />
       <RiskCards />

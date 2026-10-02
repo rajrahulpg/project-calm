@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import PageHero from "@/components/PageHero";
+import HashtagReveal from "@/components/HashtagReveal";
 import DoctorInsights from "@/components/DoctorInsights";
 import PatientStories from "@/components/PatientStories";
 import CoffeeTableBook from "@/components/CoffeeTableBook";
@@ -26,6 +27,7 @@ export default async function ResourcesPage() {
     <main>
       <Navbar />
       <PageHero sectionKey="RESOURCES_HERO" />
+      <HashtagReveal />
       <DoctorInsights videos={videos} />
       <PatientStories />
       <CoffeeTableBook />
