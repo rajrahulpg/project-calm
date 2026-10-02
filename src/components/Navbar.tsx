@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, PhoneCall, X } from "lucide-react";
 import { useLanguage } from "@/lib/language";
-import SiteLogo from "./SiteLogo";
+import SiteLogo, { SiteHashtag } from "./SiteLogo";
 import ThemeToggle from "./ThemeToggle";
 import LanguageToggle from "./LanguageToggle";
 
@@ -65,8 +65,9 @@ export default function Navbar() {
       }}
     >
       <nav className="flex items-center justify-between px-6 md:px-12 py-5" aria-label="Primary">
-        <Link href="/" className="inline-flex items-center">
+        <Link href="/" className="inline-flex flex-col items-start">
           <SiteLogo color={navFg} priority />
+          <SiteHashtag />
         </Link>
 
         <ul className="hidden lg:flex items-center gap-9">

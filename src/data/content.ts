@@ -148,7 +148,7 @@ export const MYTH_FACTS = [
   },
   {
     myth: "Treatment always means open heart surgery.",
-    fact: "Most cases are treated through a small catheter, no surgery.",
+    fact: "Many patients can receive treatment through a simple catheter procedure, avoiding open-heart surgery.",
   },
   {
     myth: "Once you feel better, you can stop your medicines.",
@@ -261,7 +261,7 @@ export const WATCH_CARDS = [
     items: [
       "Discomfort that isn't easing",
       "Swelling or redness at the site",
-      "Fever above 38°C",
+      "Fever above 100°F",
       "Breathlessness during light activity",
     ],
   },
@@ -320,8 +320,17 @@ export const RESOURCES_HERO = {
 export const DOCTOR_INSIGHTS = {
   title: "Hear It From Your Doctors",
   subtitle: "Straight answers from the people who treat this every day.",
-  placeholders: [1, 2, 3, 4],
-  note: "[Videos to be added]",
+  // The videos themselves live in data/doctor-videos.json, managed from /admin.
+  hashtag: "#HarBlockageSameNahiHota",
+  searchPlaceholder: "Search by doctor or keyword",
+  sortLabel: "Sort videos",
+  sorts: { recent: "Recently Uploaded", views: "Most Viewed" },
+  views: (n: number) => `${n} ${n === 1 ? "view" : "views"}`,
+  likes: (n: number) => `${n} ${n === 1 ? "like" : "likes"}`,
+  noResults: "No videos match your search.",
+  clearSearch: "Clear search",
+  clearFilter: "Clear Filter",
+  dateLocale: "en-IN",
 };
 
 export const PATIENT_STORIES = {

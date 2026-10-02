@@ -4,6 +4,16 @@ import { useState } from "react";
 import Image from "next/image";
 import { useLanguage } from "@/lib/language";
 
+// Campaign hashtag shown under the logo (navbar + admin panel). Same in every
+// language, so it isn't in content.ts.
+export function SiteHashtag({ className = "" }: { className?: string }) {
+  return (
+    <span className={`mt-1 text-[10px] sm:text-xs font-semibold tracking-[0.02em] whitespace-nowrap ${className}`} style={{ color: "#898A8D" }}>
+      #Har <span style={{ color: "var(--color-coral)" }}>Blockage</span> Same Nahi Hota
+    </span>
+  );
+}
+
 // Drop a file named exactly "site-logo.png" into /public/assets to have it
 // picked up here automatically — no code change needed. Until that file
 // exists, this falls back to the text wordmark.

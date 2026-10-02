@@ -147,7 +147,7 @@ export const MYTH_FACTS = [
   },
   {
     myth: "इलाज का मतलब हमेशा ओपन हार्ट सर्जरी होता है।",
-    fact: "ज़्यादातर मामलों का इलाज एक छोटे कैथेटर से होता है, सर्जरी की ज़रूरत नहीं पड़ती।",
+    fact: "कई मरीज़ों का इलाज एक आसान कैथेटर प्रक्रिया से हो सकता है, जिससे ओपन-हार्ट सर्जरी से बचा जा सकता है।",
   },
   {
     myth: "बेहतर महसूस होते ही दवाएं बंद की जा सकती हैं।",
@@ -260,7 +260,7 @@ export const WATCH_CARDS = [
     items: [
       "तकलीफ जो कम नहीं हो रही",
       "जगह पर सूजन या लालपन",
-      "38°C से ज़्यादा बुखार",
+      "100°F से ज़्यादा बुखार",
       "हल्की एक्टिविटी में सांस फूलना",
     ],
   },
@@ -319,8 +319,17 @@ export const RESOURCES_HERO = {
 export const DOCTOR_INSIGHTS = {
   title: "डॉक्टरों से सीधे सुनें",
   subtitle: "उन लोगों से सीधे जवाब, जो हर दिन इसका इलाज करते हैं।",
-  placeholders: [1, 2, 3, 4],
-  note: "[वीडियो जल्द जोड़े जाएंगे]",
+  // The videos themselves live in data/doctor-videos.json, managed from /admin.
+  hashtag: "#HarBlockageSameNahiHota",
+  searchPlaceholder: "डॉक्टर या कीवर्ड से खोजें",
+  sortLabel: "वीडियो क्रमबद्ध करें",
+  sorts: { recent: "हाल ही में अपलोड", views: "सबसे ज़्यादा देखे गए" },
+  views: (n: number) => `${n} व्यूज़`,
+  likes: (n: number) => `${n} लाइक्स`,
+  noResults: "आपकी खोज से कोई वीडियो मेल नहीं खाता।",
+  clearSearch: "खोज साफ़ करें",
+  clearFilter: "फ़िल्टर हटाएँ",
+  dateLocale: "hi-IN",
 };
 
 export const PATIENT_STORIES = {
