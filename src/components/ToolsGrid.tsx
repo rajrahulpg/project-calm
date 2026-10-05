@@ -56,7 +56,7 @@ export default function ToolsGrid() {
   const expandedContent = getExpandedContent(t, lang, setLang);
 
   return (
-    <section id="tools" style={{ background: "var(--color-bg-1)", padding: "var(--section-py) 0" }}>
+    <section id="tools" style={{ background: "var(--color-bg-0)", padding: "var(--section-py) 0" }}>
       <div className="max-w-5xl mx-auto px-6 md:px-12">
         <SectionReveal>
           <h2 className="text-3xl sm:text-4xl md:text-[2.4rem] font-medium mb-14 text-center" style={{ color: "var(--color-heading)" }}>

@@ -337,13 +337,6 @@ export const DOCTOR_INSIGHTS = {
   dateLocale: "en-IN",
 };
 
-export const PATIENT_STORIES = {
-  title: "You Are Not Alone",
-  subtitle: "Real patients, real journeys, in their own words.",
-  placeholders: [1, 2, 3],
-  note: "[Client to provide patient stories]",
-};
-
 export const COFFEE_TABLE_BOOK = {
   title: "The Coffee Table Book, Online",
   body: "Everything in the book, and more. This site carries everything from the Project CALM book, with more detail and support at every step.",

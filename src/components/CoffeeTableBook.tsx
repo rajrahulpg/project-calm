@@ -75,7 +75,7 @@ export default function CoffeeTableBook() {
   const [readerOpen, setReaderOpen] = useState(false);
 
   return (
-    <section style={{ background: "var(--color-bg-0)", padding: "var(--section-py) 0" }}>
+    <section style={{ background: "var(--color-bg-1)", padding: "var(--section-py) 0" }}>
       <div className="max-w-2xl mx-auto px-6 md:px-12 flex flex-col items-center text-center">
         <SectionReveal>
           <h2 className="text-3xl sm:text-4xl md:text-[2.4rem] font-medium mb-6 leading-tight" style={{ color: "var(--color-heading)" }}>

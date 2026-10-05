@@ -336,13 +336,6 @@ export const DOCTOR_INSIGHTS = {
   dateLocale: "hi-IN",
 };
 
-export const PATIENT_STORIES = {
-  title: "आप अकेले नहीं हैं",
-  subtitle: "असली मरीज़, असली सफर, उन्हीं की ज़ुबानी।",
-  placeholders: [1, 2, 3],
-  note: "[मरीज़ों की कहानियां जल्द जोड़ी जाएंगी]",
-};
-
 export const COFFEE_TABLE_BOOK = {
   title: "कॉफी टेबल बुक, अब ऑनलाइन",
   body: "किताब में जो कुछ है, वो सब और उससे भी ज़्यादा। इस साइट पर Project CALM किताब की हर जानकारी है, हर कदम पर ज़्यादा डिटेल और सपोर्ट के साथ।",
