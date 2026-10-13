@@ -406,7 +406,7 @@ export const UI = {
   navbar: {
     openMenu: "मेन्यू खोलें",
     closeMenu: "मेन्यू बंद करें",
-    talkToSomeone: "डॉक्टर से बात करें",
+    talkToSomeone: "डॉक्टरों की राय",
   },
   footer: {
     medicalDisclaimer: "मेडिकल डिस्क्लेमर",

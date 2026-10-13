@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Footprints, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
 import SectionReveal from "./SectionReveal";
 import { usePrefersReducedMotion } from "@/lib/hooks";
 import { useLanguage } from "@/lib/language";
@@ -13,7 +13,28 @@ const BODY_OUTLINE =
 const HEART_SHAPE = "M100,152 C84,141 78,124 90,116 C96,112 100,118 100,121 C100,118 104,112 110,116 C122,124 116,141 100,152 Z";
 
 const CAD_ARTERIES = ["M100,86 L100,116", "M95,120 C88,128 90,140 97,147", "M105,120 C112,128 110,140 103,147"];
-const PAD_ARTERIES = ["M100,152 L100,214", "M100,214 C94,240 88,300 84,388", "M100,214 C106,240 112,300 116,388"];
+// PAD is drawn from the thighs down only: femoral arteries from the groin to
+// the knee, then splitting into the lower-leg arteries down to the ankle.
+const PAD_ARTERIES = [
+  "M86,214 C86,250 85,280 84,304 C83,340 82,366 82,392",
+  "M84,304 C78,330 76,362 76,392",
+  "M114,214 C114,250 115,280 116,304 C117,340 118,366 118,392",
+  "M116,304 C122,330 124,362 124,392",
+];
+// Both legs, hip line to feet, traced from BODY_OUTLINE.
+const LEGS_SHAPE = "M60,210 L140,210 L134,290 L130,400 L106,400 L102,300 L100,240 L98,300 L94,400 L70,400 L66,290 Z";
+
+type IconProps = { size?: number; color?: string; strokeWidth?: number };
+
+// Side-on leg, thigh to foot — lucide has no leg icon.
+function LegIcon({ size = 24, color = "currentColor", strokeWidth = 2 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M6 2C6.5 6 7.6 9.6 8.6 12.6 8.3 15.4 8.7 18 9.4 20.2V22h9.4c.4 0 .5-.4.3-.8-.5-1-2.6-1.6-5.9-2-.3-2.2 0-4.6.6-6.6.8-3.4 1.6-7 1.8-10.6" />
+      <path d="M8.8 12.6q2.4 1 4.9 0" opacity={0.6} />
+    </svg>
+  );
+}
 
 function FlowDots({ paths, animate }: { paths: string[]; animate: boolean }) {
   if (!animate) return null;
@@ -66,9 +87,9 @@ export default function BodyMap() {
   const [region, setRegion] = useState<Region>("cad");
   const animate = !reducedMotion;
 
-  const CARDS: Array<{ key: Region; title: string; body: string; icon: typeof Heart }> = [
+  const CARDS: Array<{ key: Region; title: string; body: string; icon: React.ComponentType<IconProps> }> = [
     { key: "cad", title: t.CAD_PAD.cad.title, body: t.CAD_PAD.cad.body, icon: Heart },
-    { key: "pad", title: t.CAD_PAD.pad.title, body: t.CAD_PAD.pad.body, icon: Footprints },
+    { key: "pad", title: t.CAD_PAD.pad.title, body: t.CAD_PAD.pad.body, icon: LegIcon },
   ];
 
   const activePaths = region === "cad" ? CAD_ARTERIES : PAD_ARTERIES;
@@ -83,6 +104,15 @@ export default function BodyMap() {
           <svg viewBox="0 0 200 420" className="w-full max-w-[220px] h-auto" role="group" aria-label={t.UI.bodyMap.hint}>
             <circle cx={100} cy={36} r={24} fill="var(--color-card)" stroke="var(--color-text-muted)" strokeWidth={1.2} opacity={0.7} />
             <path d={BODY_OUTLINE} fill="var(--color-card)" stroke="var(--color-text-muted)" strokeWidth={1.2} opacity={0.7} />
+
+            <path
+              d={LEGS_SHAPE}
+              fill="var(--color-coral-tint)"
+              stroke="var(--color-coral-soft)"
+              strokeWidth={1.2}
+              strokeLinejoin="round"
+              style={{ opacity: region === "pad" ? 1 : 0, transition: "opacity 0.4s" }}
+            />
 
             <g fill="none" stroke="var(--color-text-muted)" strokeWidth={1.5} strokeLinecap="round" opacity={0.35}>
               {[...CAD_ARTERIES, ...PAD_ARTERIES].map((d) => <path key={d} d={d} />)}

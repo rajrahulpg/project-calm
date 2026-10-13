@@ -75,17 +75,17 @@ export default function Navbar() {
       <nav className="flex items-center justify-between px-6 md:px-12 py-5" aria-label="Primary">
         <Link href="/" className="inline-flex flex-col items-start">
           <SiteLogo color={navFg} priority />
-          <SiteHashtag />
+          <SiteHashtag onDark={overDarkHero} />
         </Link>
 
-        <ul className="hidden lg:flex items-center gap-9">
+        <ul className="hidden lg:flex items-center gap-10 xl:gap-12">
           {t.NAV_LINKS.map((link) => {
             const isActive = pathname === link.href.split("#")[0];
             return (
               <li key={link.label}>
                 <Link
                   href={link.href}
-                  className="block py-3 text-[11px] uppercase tracking-[0.16em] transition-colors"
+                  className="relative block py-3 text-[16px] xl:text-[17px] uppercase tracking-[0.16em] transition-colors"
                   style={{ color: isActive ? navFg : navFgMuted, fontWeight: isActive ? 700 : 500 }}
                   onMouseEnter={(e) => {
                     if (!isActive) e.currentTarget.style.color = navFg;
@@ -95,6 +95,14 @@ export default function Navbar() {
                   }}
                 >
                   {link.label}
+                  {isActive && (
+                    // Right inset matches the letter-spacing trailing the last glyph.
+                    <span
+                      aria-hidden="true"
+                      className="absolute left-0 bottom-1.5 h-[2px] rounded-full"
+                      style={{ right: "0.16em", background: "var(--color-coral)" }}
+                    />
+                  )}
                 </Link>
               </li>
             );

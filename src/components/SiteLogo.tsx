@@ -6,10 +6,16 @@ import { useLanguage } from "@/lib/language";
 
 // Campaign hashtag shown under the logo (navbar + admin panel). Same in every
 // language, so it isn't in content.ts.
-export function SiteHashtag({ className = "" }: { className?: string }) {
+// `onDark` is for when it sits over the dark hero video, where the brand red
+// and mid grey both sink into the red artery footage.
+export function SiteHashtag({ className = "", onDark = false }: { className?: string; onDark?: boolean }) {
+  const accent = onDark ? "#FF9AAB" : "var(--color-coral)";
   return (
-    <span className={`mt-1 text-[10px] sm:text-xs font-semibold tracking-[0.02em] whitespace-nowrap ${className}`} style={{ color: "#898A8D" }}>
-      #Har <span style={{ color: "var(--color-coral)" }}>Blockage</span> Same Nahi Hota
+    <span
+      className={`mt-1 text-[10px] sm:text-xs font-semibold tracking-[0.02em] whitespace-nowrap transition-colors ${className}`}
+      style={{ color: onDark ? "#D4D6D9" : "#898A8D", textShadow: onDark ? "0 1px 3px rgba(0,0,0,0.7)" : undefined }}
+    >
+      <span style={{ color: accent }}>#</span>Har <span style={{ color: accent }}>Blockage</span> Same Nahi Hota
     </span>
   );
 }

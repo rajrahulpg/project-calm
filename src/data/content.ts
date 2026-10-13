@@ -175,7 +175,7 @@ export const TREATMENTS = [
   {
     key: "ivl",
     title: "Intravascular Lithotripsy",
-    body: "sonic pressure waves break up the calcium from inside",
+    body: "sonic pressure waves fracture the calcium from inside",
   },
   {
     key: "balloons",
@@ -406,7 +406,7 @@ export const UI = {
   navbar: {
     openMenu: "Open menu",
     closeMenu: "Close menu",
-    talkToSomeone: "Talk to Doctor",
+    talkToSomeone: "Insight from Doctors",
   },
   footer: {
     medicalDisclaimer: "Medical Disclaimer",
