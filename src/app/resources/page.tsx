@@ -1,14 +1,5 @@
 import type { Metadata } from "next";
-import Navbar from "@/components/Navbar";
-import PageHero from "@/components/PageHero";
-import HashtagReveal from "@/components/HashtagReveal";
-import DoctorInsights from "@/components/DoctorInsights";
-import CoffeeTableBook from "@/components/CoffeeTableBook";
-import ToolsGrid from "@/components/ToolsGrid";
-import ClosingSection from "@/components/ClosingSection";
-import ReferencesSection from "@/components/ReferencesSection";
-import MedicalDisclaimer from "@/components/MedicalDisclaimer";
-import Footer from "@/components/Footer";
+import ResourcesPageBody from "@/components/ResourcesPageBody";
 import { RESOURCES_HERO } from "@/data/content";
 import { readVideos } from "@/lib/videos";
 
@@ -21,19 +12,5 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function ResourcesPage() {
-  const videos = await readVideos();
-  return (
-    <main>
-      <Navbar />
-      <PageHero sectionKey="RESOURCES_HERO" />
-      <HashtagReveal />
-      <DoctorInsights videos={videos} />
-      <CoffeeTableBook />
-      <ToolsGrid />
-      <ClosingSection />
-      <ReferencesSection />
-      <MedicalDisclaimer />
-      <Footer />
-    </main>
-  );
+  return <ResourcesPageBody videos={await readVideos()} />;
 }

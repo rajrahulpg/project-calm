@@ -23,7 +23,7 @@ export default function Footer() {
   return (
     <footer style={{ background: "var(--color-bg-1)", borderTop: "1px solid var(--color-line)" }}>
       {/* Legal notice only on the last page (Resources). */}
-      {pathname === "/resources" && (
+      {(pathname === "/resources" || pathname.startsWith("/resources/")) && (
         <div className="max-w-6xl mx-auto px-6 md:px-12 pt-10 sm:pt-12 text-center">
           <p className="whitespace-pre-line text-xs leading-relaxed" style={{ color: "var(--color-text-muted)", opacity: 0.85 }}>
             {t.FOOTER_LEGAL_NOTICE}

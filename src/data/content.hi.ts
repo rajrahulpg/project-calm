@@ -333,6 +333,7 @@ export const DOCTOR_INSIGHTS = {
   noResults: "आपकी खोज से कोई वीडियो मेल नहीं खाता।",
   clearSearch: "खोज साफ़ करें",
   clearFilter: "फ़िल्टर हटाएँ",
+  viewMore: "और देखें",
   dateLocale: "hi-IN",
 };
 

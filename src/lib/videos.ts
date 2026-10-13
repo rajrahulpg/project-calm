@@ -2,6 +2,7 @@
 // components only — client components get the data as props.
 import { promises as fs } from "fs";
 import path from "path";
+import { slugify } from "./doctor-slug";
 
 // The doctor-video list behind the Resources page. It lives in a JSON file
 // (not content.ts) so the /admin panel can add and remove videos at runtime
@@ -11,6 +12,10 @@ export type DoctorVideo = {
   id: string;
   doctor: string;
   doctorHi?: string;
+  // Locked at upload — it's the /resources/<slug> link inside the doctor's QR.
+  slug?: string;
+  // Part of the doctor's QR page? Missing = yes (see hasQr).
+  qr?: boolean;
   title: string;
   thumbnail: string;
   views: number;
@@ -97,6 +102,7 @@ export async function fetchYouTubeVideo(id: string): Promise<DoctorVideo> {
   return {
     id,
     doctor,
+    slug: slugify(doctor),
     title: cleanTitle,
     thumbnail: hasMaxres ? maxres : `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
     views,

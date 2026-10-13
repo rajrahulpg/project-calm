@@ -334,6 +334,7 @@ export const DOCTOR_INSIGHTS = {
   noResults: "No videos match your search.",
   clearSearch: "Clear search",
   clearFilter: "Clear Filter",
+  viewMore: "View More",
   dateLocale: "en-IN",
 };
 

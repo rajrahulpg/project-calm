@@ -2,15 +2,21 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import { Eye, Play, Search, ThumbsUp, X } from "lucide-react";
+import { ChevronDown, Eye, Play, Search, ThumbsUp, X } from "lucide-react";
 import SectionReveal from "./SectionReveal";
 import { useLanguage } from "@/lib/language";
+import { doctorSlug, hasQr } from "@/lib/doctor-slug";
 import type { DoctorVideo } from "@/lib/videos";
 
 type Video = DoctorVideo;
 // "default" keeps the order set in the /admin panel (the JSON file order).
 type SortKey = "default" | "recent" | "views";
 const SORT_KEYS: Exclude<SortKey, "default">[] = ["recent", "views"];
+
+// Up to 12 videos at first (a doctor's featured one included), then
+// "View More" opens 6 at a time.
+const FIRST_PAGE = 12;
+const PAGE_STEP = 6;
 
 const byRecent = (a: Video, b: Video) => b.uploaded.localeCompare(a.uploaded);
 const SORTERS: Record<SortKey, ((a: Video, b: Video) => number) | null> = {
@@ -70,29 +76,101 @@ function VideoModal({ video, onClose }: { video: Video; onClose: () => void }) {
   );
 }
 
-export default function DoctorInsights({ videos }: { videos: Video[] }) {
+function VideoCard({ video, big, onOpen }: { video: Video; big: boolean; onOpen: (v: Video) => void }) {
+  const { t } = useLanguage();
+  const DOCTOR_INSIGHTS = t.DOCTOR_INSIGHTS;
+  const dateFmt = new Intl.DateTimeFormat(DOCTOR_INSIGHTS.dateLocale, { day: "numeric", month: "short", year: "numeric" });
+  return (
+    <button
+      type="button"
+      aria-haspopup="dialog"
+      aria-label={video.doctor}
+      onClick={() => onOpen(video)}
+      className="group w-full h-full text-left rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-2"
+      style={{ background: "var(--color-card)", border: "1px solid var(--color-line)" }}
+    >
+      <div className="relative flex items-center justify-center overflow-hidden" style={{ aspectRatio: "16 / 9", background: "var(--color-bg-2)" }}>
+        <Image
+          src={video.thumbnail}
+          alt=""
+          fill
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          sizes={big ? "(min-width: 1024px) 760px, 100vw" : "(min-width: 1024px) 360px, 50vw"}
+        />
+        <span className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.35) 100%)" }} aria-hidden="true" />
+        <span
+          className="relative flex items-center justify-center rounded-full transition-all duration-500 group-hover:scale-110"
+          style={{ width: big ? 72 : 52, height: big ? 72 : 52, background: "var(--color-coral)", boxShadow: "0 16px 32px -12px var(--color-coral-glow)" }}
+        >
+          <Play size={big ? 26 : 18} color="var(--color-on-accent)" fill="var(--color-on-accent)" className="translate-x-px" />
+        </span>
+        {video.duration && (
+          <span
+            className="absolute right-2 bottom-2 px-1.5 py-0.5 rounded text-[10px] sm:text-[11px] font-semibold tabular-nums"
+            style={{ background: "rgba(0,0,0,0.75)", color: "#FFFFFF" }}
+          >
+            {video.duration}
+          </span>
+        )}
+      </div>
+      <div className={big ? "p-4 sm:p-6" : "p-3 sm:p-5"}>
+        <p className={`${big ? "text-base sm:text-xl" : "text-sm sm:text-base"} font-medium leading-snug`} style={{ color: "var(--color-text)" }}>
+          {video.doctor}
+        </p>
+        <p className="mt-1 text-[9px] sm:text-xs font-semibold break-all" style={{ color: "var(--color-coral)" }}>
+          {DOCTOR_INSIGHTS.hashtag}
+        </p>
+        <p className="mt-2 sm:mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] sm:text-xs tabular-nums" style={{ color: "var(--color-text-muted)" }}>
+          <span className="inline-flex items-center gap-1"><Eye size={12} />{DOCTOR_INSIGHTS.views(video.views)}</span>
+          <span className="inline-flex items-center gap-1"><ThumbsUp size={12} />{DOCTOR_INSIGHTS.likes(video.likes)}</span>
+          <span>{dateFmt.format(new Date(`${video.uploaded}T00:00:00`))}</span>
+        </p>
+      </div>
+    </button>
+  );
+}
+
+// `featuredSlug` is set on /resources/<doctor> (opened from that doctor's QR
+// code): their first video sits above the grid, larger — full width if it's
+// their only one — and the rest of their videos lead the grid. Searching or
+// sorting drops back to the plain grid.
+export default function DoctorInsights({ videos, featuredSlug }: { videos: Video[]; featuredSlug?: string }) {
   const { t, lang } = useLanguage();
   const DOCTOR_INSIGHTS = t.DOCTOR_INSIGHTS;
   const [open, setOpen] = useState<Video | null>(null);
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<SortKey>("default");
   const filtered = sort !== "default" || query.trim() !== "";
+  // Tied to the current search + sort, so changing either starts again at 12.
+  const filterKey = `${query}|${sort}`;
+  const [page, setPage] = useState({ key: filterKey, limit: FIRST_PAGE });
+  const limit = page.key === filterKey ? page.limit : FIRST_PAGE;
 
   // Every word typed must appear somewhere in the title or doctor name (in
   // either language), so "sarita", "har blockage" or "dr rao" all work.
   // Matching is substring, so "blockage" also finds the joined-up hashtag.
-  const shown = useMemo(() => {
+  const { featured, featuredOnly, shown } = useMemo(() => {
+    const localize = (v: Video) => ({ ...v, doctor: lang === "hi" && v.doctorHi ? v.doctorHi : v.doctor });
     const words = query.toLowerCase().split(/\s+/).filter(Boolean);
     const list = videos.filter((v) => {
       const haystack = `${v.title} ${v.doctor} ${v.doctorHi ?? ""}`.toLowerCase();
       return words.every((w) => haystack.includes(w.replace(/^#/, "")));
     });
     const sorter = SORTERS[sort];
-    return (sorter ? [...list].sort(sorter) : list)
-      .map((v) => ({ ...v, doctor: lang === "hi" && v.doctorHi ? v.doctorHi : v.doctor }));
-  }, [videos, query, sort, lang]);
+    const sorted = sorter ? [...list].sort(sorter) : list;
 
-  const dateFmt = new Intl.DateTimeFormat(DOCTOR_INSIGHTS.dateLocale, { day: "numeric", month: "short", year: "numeric" });
+    if (!featuredSlug || filtered) return { featured: null, featuredOnly: false, shown: sorted.map(localize) };
+    const isTheirs = (v: Video) => hasQr(v) && doctorSlug(v) === featuredSlug;
+    const theirs = sorted.filter(isTheirs);
+    const others = sorted.filter((v) => !isTheirs(v));
+    return {
+      featured: theirs[0] ? localize(theirs[0]) : null,
+      featuredOnly: theirs.length === 1,
+      shown: [...theirs.slice(1), ...others].map(localize),
+    };
+  }, [videos, query, sort, lang, featuredSlug, filtered]);
+  const visible = shown.slice(0, Math.max(0, limit - (featured ? 1 : 0)));
+  const hiddenCount = shown.length - visible.length;
 
   return (
     <section style={{ background: "var(--color-bg-0)", padding: "var(--section-py) 0" }}>
@@ -175,7 +253,13 @@ export default function DoctorInsights({ videos }: { videos: Video[] }) {
           </div>
         </SectionReveal>
 
-        {shown.length === 0 && (
+        {featured && (
+          <SectionReveal className={`mx-auto mb-3 sm:mb-5 ${featuredOnly ? "w-full" : "w-full lg:w-[calc((100%-2.5rem)/3*2+1.25rem)]"}`}>
+            <VideoCard video={featured} big onOpen={setOpen} />
+          </SectionReveal>
+        )}
+
+        {shown.length === 0 && !featured && (
           <div className="text-center py-12">
             <p className="text-sm mb-4" style={{ color: "var(--color-text-muted)" }}>{DOCTOR_INSIGHTS.noResults}</p>
             <button
@@ -192,61 +276,30 @@ export default function DoctorInsights({ videos }: { videos: Video[] }) {
         {/* Flex-wrap rather than a grid so a short last row (3 + 2, 2 + 1,
             a single search hit…) always sits centered, whatever the count. */}
         <div className="flex flex-wrap justify-center gap-3 sm:gap-5">
-          {shown.map((video, i) => (
+          {visible.map((video, i) => (
             <SectionReveal
               key={video.id}
-              delay={i * 90}
+              delay={(i < FIRST_PAGE ? i : (i - FIRST_PAGE) % PAGE_STEP) * 90}
               className="w-[calc(50%-0.375rem)] sm:w-[calc(50%-0.625rem)] lg:w-[calc((100%-2.5rem)/3)]"
             >
-              <button
-                type="button"
-                aria-haspopup="dialog"
-                aria-label={video.doctor}
-                onClick={() => setOpen(video)}
-                className="group w-full h-full text-left rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-2"
-                style={{ background: "var(--color-card)", border: "1px solid var(--color-line)" }}
-              >
-                <div className="relative flex items-center justify-center overflow-hidden" style={{ aspectRatio: "16 / 9", background: "var(--color-bg-2)" }}>
-                  <Image
-                    src={video.thumbnail}
-                    alt=""
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    sizes="(min-width: 1024px) 360px, 50vw"
-                  />
-                  <span className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.35) 100%)" }} aria-hidden="true" />
-                  <span
-                    className="relative flex items-center justify-center rounded-full transition-all duration-500 group-hover:scale-110"
-                    style={{ width: 52, height: 52, background: "var(--color-coral)", boxShadow: "0 16px 32px -12px var(--color-coral-glow)" }}
-                  >
-                    <Play size={18} color="var(--color-on-accent)" fill="var(--color-on-accent)" className="translate-x-px" />
-                  </span>
-                  {video.duration && (
-                    <span
-                      className="absolute right-2 bottom-2 px-1.5 py-0.5 rounded text-[10px] sm:text-[11px] font-semibold tabular-nums"
-                      style={{ background: "rgba(0,0,0,0.75)", color: "#FFFFFF" }}
-                    >
-                      {video.duration}
-                    </span>
-                  )}
-                </div>
-                <div className="p-3 sm:p-5">
-                  <p className="text-sm sm:text-base font-medium leading-snug" style={{ color: "var(--color-text)" }}>
-                    {video.doctor}
-                  </p>
-                  <p className="mt-1 text-[9px] sm:text-xs font-semibold break-all" style={{ color: "var(--color-coral)" }}>
-                    {DOCTOR_INSIGHTS.hashtag}
-                  </p>
-                  <p className="mt-2 sm:mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] sm:text-xs tabular-nums" style={{ color: "var(--color-text-muted)" }}>
-                    <span className="inline-flex items-center gap-1"><Eye size={12} />{DOCTOR_INSIGHTS.views(video.views)}</span>
-                    <span className="inline-flex items-center gap-1"><ThumbsUp size={12} />{DOCTOR_INSIGHTS.likes(video.likes)}</span>
-                    <span>{dateFmt.format(new Date(`${video.uploaded}T00:00:00`))}</span>
-                  </p>
-                </div>
-              </button>
+              <VideoCard video={video} big={false} onOpen={setOpen} />
             </SectionReveal>
           ))}
         </div>
+
+        {hiddenCount > 0 && (
+          <div className="mt-10 flex justify-center">
+            <button
+              type="button"
+              onClick={() => setPage({ key: filterKey, limit: limit + PAGE_STEP })}
+              className="inline-flex items-center gap-2 px-7 py-3 rounded-full text-xs font-semibold uppercase tracking-[0.12em] transition-colors hover:bg-[var(--color-coral-tint)]"
+              style={{ color: "var(--color-coral)", border: "1px solid var(--color-coral-soft)", background: "var(--color-card)" }}
+            >
+              {DOCTOR_INSIGHTS.viewMore}
+              <ChevronDown size={15} />
+            </button>
+          </div>
+        )}
       </div>
 
       {open && <VideoModal video={open} onClose={() => setOpen(null)} />}

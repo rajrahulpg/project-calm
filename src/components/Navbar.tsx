@@ -80,7 +80,8 @@ export default function Navbar() {
 
         <ul className="hidden lg:flex items-center gap-10 xl:gap-12">
           {t.NAV_LINKS.map((link) => {
-            const isActive = pathname === link.href.split("#")[0];
+            const base = link.href.split("#")[0];
+            const isActive = pathname === base || (base !== "/" && pathname.startsWith(`${base}/`));
             return (
               <li key={link.label}>
                 <Link
@@ -142,7 +143,8 @@ export default function Navbar() {
           style={{ background: "color-mix(in srgb, var(--color-bg-0) 96%, transparent)", backdropFilter: "blur(18px)" }}
         >
           {t.NAV_LINKS.map((link) => {
-            const isActive = pathname === link.href.split("#")[0];
+            const base = link.href.split("#")[0];
+            const isActive = pathname === base || (base !== "/" && pathname.startsWith(`${base}/`));
             return (
               <Link
                 key={link.label}
