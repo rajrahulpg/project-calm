@@ -44,10 +44,7 @@ function setTheme(next: Theme) {
   listeners.forEach((listener) => listener());
 }
 
-// `forceLight`: for use over the transparent, still-dark hero video (before
-// the navbar has a solid background) — the icon needs to stay light-toned
-// regardless of the page theme, since it isn't sitting on the page bg yet.
-export default function ThemeToggle({ forceLight = false }: { forceLight?: boolean }) {
+export default function ThemeToggle() {
   const { t } = useLanguage();
   const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const isLight = theme === "light";
@@ -61,8 +58,8 @@ export default function ThemeToggle({ forceLight = false }: { forceLight?: boole
       style={{
         width: 40,
         height: 40,
-        border: forceLight ? "1px solid rgba(245,245,242,0.35)" : "1px solid var(--color-line)",
-        color: forceLight ? "#F5F5F2" : "var(--color-text)",
+        border: "1px solid var(--color-line)",
+        color: "var(--color-text)",
       }}
     >
       {isLight ? <Moon size={17} /> : <Sun size={17} />}

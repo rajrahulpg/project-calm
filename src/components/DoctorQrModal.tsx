@@ -6,7 +6,7 @@ import { AlertTriangle, Check, Copy, Download, ExternalLink, X } from "lucide-re
 import { doctorUrl } from "@/lib/doctor-slug";
 
 const HASHTAG = "#HarBlockageSameNahiHota";
-const RED = "#EA0029";
+const RED = "#EA052B";
 
 // Draws the printable card: QR on top, doctor's name and hashtag beneath,
 // on white so it prints and scans the same whatever the admin's theme.

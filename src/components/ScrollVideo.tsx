@@ -86,9 +86,13 @@ export default function ScrollVideo() {
     const video = videoRef.current;
     if (!section || !video) return;
 
+    // The section sits below the fixed navbar (margin-top: --nav-h), so
+    // scrubbing starts at page top: when the section is --nav-h from the top.
+    const navHeight = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--nav-h")) || 0;
     const trigger = ScrollTrigger.create({
       trigger: section,
-      start: "top top",
+      start: () => `top ${navHeight()}px`,
+      invalidateOnRefresh: true,
       end: "bottom bottom",
       scrub: true,
       onUpdate: (self) => {
@@ -151,9 +155,12 @@ export default function ScrollVideo() {
       id="story"
       ref={sectionRef}
       className="relative"
-      style={{ height: reducedMotion ? "auto" : isMobile ? "220vh" : "300vh", background: "var(--color-bg-0)" }}
+      style={{ height: reducedMotion ? "auto" : isMobile ? "220vh" : "300vh", marginTop: "var(--nav-h)", background: "var(--color-bg-0)" }}
     >
-      <div className={reducedMotion ? "relative w-full min-h-screen" : "sticky top-0 h-screen w-full overflow-hidden"}>
+      <div
+        className={reducedMotion ? "relative w-full" : "sticky w-full overflow-hidden"}
+        style={reducedMotion ? { minHeight: "calc(100vh - var(--nav-h))" } : { top: "var(--nav-h)", height: "calc(100vh - var(--nav-h))" }}
+      >
         {!videoFailed ? (
           <video
             ref={videoRef}

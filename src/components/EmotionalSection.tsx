@@ -91,7 +91,7 @@ function BreathingCircle() {
           style={{
             width: 150,
             height: 150,
-            background: "radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--color-coral) 80%, white) 0%, var(--color-coral) 70%)",
+            background: "var(--color-coral)",
             boxShadow: "0 30px 60px -30px var(--color-coral-glow)",
             transition: "transform 0.1s linear",
             willChange: "transform",
