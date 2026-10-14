@@ -12,7 +12,9 @@ import LanguageToggle from "./LanguageToggle";
 export default function Navbar() {
   const { t } = useLanguage();
   const pathname = usePathname();
-  const [scrolled, setScrolled] = useState(false);
+  // Solid from the first paint on home so the bar never flashes transparent
+  // (and then solid) while the page loads.
+  const [scrolled, setScrolled] = useState(pathname === "/");
   const [open, setOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
 
