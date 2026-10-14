@@ -124,7 +124,7 @@ export default function CaregiverSection() {
       <span className="flex items-center justify-center rounded-full shrink-0" style={{ width: 52, height: 52, background: "var(--color-coral-tint)" }}>
         <HandHeart size={24} color="var(--color-coral)" strokeWidth={1.75} />
       </span>
-      <h2 className="text-2xl sm:text-3xl font-medium" style={{ color: "var(--color-heading)" }}>
+      <h2 className="text-2xl sm:text-3xl md:text-[2.2rem] font-semibold" style={{ color: "var(--color-heading)" }}>
         {CAREGIVER_SECTION.title}
       </h2>
     </div>
@@ -133,7 +133,7 @@ export default function CaregiverSection() {
   if (!pinned) {
     return (
       <section style={{ background: "var(--color-bg-1)", padding: "var(--section-py) 0" }}>
-        <div className="max-w-4xl mx-auto px-6 md:px-12">
+        <div className="max-w-[1560px] mx-auto px-6 md:px-10 xl:px-14">
           <SectionReveal>
             <div className="rounded-2xl p-8 sm:p-12" style={{ background: "var(--color-card)", border: "1px solid var(--color-line)" }}>
               {header}
@@ -159,7 +159,7 @@ export default function CaregiverSection() {
   return (
     <section ref={sectionRef} className="relative" style={{ background: "var(--color-bg-1)", height: `${total * VH_PER_TIP}vh` }}>
       <div className="sticky top-24 md:top-28 flex items-center px-6" style={{ minHeight: "calc(100vh - 6rem)" }}>
-        <div className="max-w-4xl mx-auto w-full">
+        <div className="max-w-[1560px] mx-auto w-full">
           {header}
 
           <div className="relative" style={{ minHeight: "11rem", overflow: "hidden" }} aria-live="polite">

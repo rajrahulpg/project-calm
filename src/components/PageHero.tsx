@@ -57,7 +57,7 @@ export default function PageHero({
         </div>
       )}
       {variant && <HeroBackdrop variant={variant} mask={variant === "ecg" ? mask : undefined} />}
-      <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-12 text-center">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 md:px-12 text-center">
         {eyebrow && (
           <p className="text-[11px] uppercase tracking-[0.3em] mb-5" style={{ color: "var(--color-coral)" }}>
             {eyebrow}
@@ -65,7 +65,7 @@ export default function PageHero({
         )}
         <h1
           ref={headlineRef}
-          className="text-gradient-accent inline-block whitespace-pre-line text-[2.2rem] sm:text-[3rem] md:text-[3.4rem] leading-[1.1] font-medium pb-1"
+          className="text-gradient-accent inline-block whitespace-pre-line xl:whitespace-pre text-[2.2rem] sm:text-[3rem] md:text-[4rem] leading-[1.1] font-semibold pb-1"
         >
           {headline}
         </h1>

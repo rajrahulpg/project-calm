@@ -139,7 +139,7 @@ export default function EmotionalSection() {
       <AuroraBlobs intensity={0.1} />
       <div className="relative z-10 max-w-2xl mx-auto px-6 text-center">
         <SectionReveal>
-          <h2 className="text-3xl sm:text-4xl md:text-[2.6rem] font-medium leading-tight" style={{ color: "var(--color-heading)" }}>
+          <h2 className="text-3xl sm:text-4xl md:text-[3rem] font-semibold leading-tight" style={{ color: "var(--color-heading)" }}>
             {EMOTIONAL_SECTION.title}
           </h2>
         </SectionReveal>

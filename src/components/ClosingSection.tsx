@@ -17,7 +17,7 @@ export default function ClosingSection() {
       <AuroraBlobs intensity={0.2} />
       <div className="relative z-10 max-w-2xl mx-auto">
         <SectionReveal>
-          <h2 className="text-gradient-accent text-4xl sm:text-5xl md:text-[3.4rem] font-medium leading-tight pb-1">
+          <h2 className="text-gradient-accent text-4xl sm:text-5xl md:text-[3.9rem] font-semibold leading-tight pb-1">
             {CLOSING.headline}
           </h2>
         </SectionReveal>

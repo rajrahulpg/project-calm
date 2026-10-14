@@ -96,7 +96,7 @@ export default function BodyMap() {
 
   return (
     <section style={{ background: "var(--color-bg-1)", padding: "var(--section-py) 0" }}>
-      <div className="max-w-5xl mx-auto px-6 md:px-12 grid md:grid-cols-[0.75fr_1.25fr] gap-10 md:gap-16 items-center">
+      <div className="max-w-[1560px] mx-auto px-6 md:px-10 xl:px-14 grid md:grid-cols-[0.75fr_1.25fr] gap-10 md:gap-16 items-center">
         <SectionReveal className="flex flex-col items-center">
           <p className="text-xs sm:text-sm mb-4" style={{ color: "var(--color-text-muted)", opacity: 0.8 }}>
             {t.UI.bodyMap.hint}

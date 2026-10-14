@@ -27,9 +27,9 @@ export default function ConditionIntro() {
           }}
         />
       </div>
-      <div className="relative max-w-3xl mx-auto px-6 md:px-12 text-center">
+      <div className="relative max-w-5xl mx-auto px-6 md:px-10 xl:px-14 text-center">
         <SectionReveal>
-          <h2 className="text-3xl sm:text-4xl md:text-[2.6rem] leading-[1.12] font-medium mb-6" style={{ color: "var(--color-heading)" }}>
+          <h2 className="text-3xl sm:text-4xl md:text-[3rem] leading-[1.12] font-semibold mb-6" style={{ color: "var(--color-heading)" }}>
             {CONDITION_INTRO.subtitle}
           </h2>
         </SectionReveal>

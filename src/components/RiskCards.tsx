@@ -309,14 +309,14 @@ export default function RiskCards() {
           }}
         />
       </div>
-      <div className="relative max-w-6xl mx-auto px-6 md:px-12">
+      <div className="relative max-w-[1560px] mx-auto px-6 md:px-10 xl:px-14">
         <SectionReveal>
           {/* Hand-scrawled note beside "Risk", joined by a short leader line — sits
               in normal flow next to the heading so it reflows instead of
               overlapping at widths where the heading text is wider/narrower
               than the old fixed offset assumed. */}
           <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 mb-4">
-            <h2 className="text-3xl sm:text-4xl md:text-[2.4rem] font-medium text-center" style={{ color: "var(--color-heading)" }}>
+            <h2 className="text-3xl sm:text-4xl md:text-[3rem] font-semibold text-center" style={{ color: "var(--color-heading)" }}>
               {t.RISK_SECTION_TITLE}
             </h2>
             <span className="inline-flex items-center gap-1.5 shrink-0" aria-hidden="true">

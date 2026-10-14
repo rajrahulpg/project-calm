@@ -209,9 +209,9 @@ export default function TreatmentExplorer() {
 
   return (
     <section ref={sectionRef} style={{ background: "var(--color-bg-0)", padding: "var(--section-py) 0" }}>
-      <div className="max-w-6xl mx-auto px-6 md:px-12">
+      <div className="max-w-[1560px] mx-auto px-6 md:px-10 xl:px-14">
         <SectionReveal>
-          <h2 className="text-3xl sm:text-4xl md:text-[2.4rem] font-medium mb-4 text-center max-w-2xl mx-auto" style={{ color: "var(--color-heading)" }}>
+          <h2 className="text-3xl sm:text-4xl md:text-[3rem] font-semibold mb-4 text-center max-w-2xl mx-auto" style={{ color: "var(--color-heading)" }}>
             {t.TREATMENT_SECTION_TITLE}
           </h2>
           <p className="text-sm sm:text-base text-center mb-12" style={{ color: "var(--color-text-muted)", opacity: 0.8 }}>

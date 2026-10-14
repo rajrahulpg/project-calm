@@ -8,9 +8,9 @@ export default function ReferencesSection() {
 
   return (
     <section style={{ background: "var(--color-bg-0)", padding: "var(--section-py-sm) 0" }}>
-      <div className="max-w-3xl mx-auto px-6 md:px-12">
+      <div className="max-w-5xl mx-auto px-6 md:px-10 xl:px-14">
         <SectionReveal>
-          <h2 className="text-xl sm:text-2xl font-medium mb-6" style={{ color: "var(--color-heading)" }}>
+          <h2 className="text-xl sm:text-2xl md:text-[1.9rem] font-semibold mb-6" style={{ color: "var(--color-heading)" }}>
             {t.REFERENCES_TITLE}
           </h2>
           <ol className="flex flex-col gap-3">

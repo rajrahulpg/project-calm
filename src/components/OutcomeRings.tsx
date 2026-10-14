@@ -53,9 +53,9 @@ export default function OutcomeRings() {
 
   return (
     <section className="band-accent" style={{ padding: "var(--section-py-lg) 0" }}>
-      <div className="max-w-6xl mx-auto px-6 md:px-12">
+      <div className="max-w-[1560px] mx-auto px-6 md:px-10 xl:px-14">
         <SectionReveal>
-          <h2 className="text-3xl sm:text-4xl md:text-[2.4rem] font-medium mb-16 text-center" style={{ color: "#FFFFFF" }}>
+          <h2 className="text-3xl sm:text-4xl md:text-[3rem] font-semibold mb-16 text-center" style={{ color: "#FFFFFF" }}>
             {title}
           </h2>
         </SectionReveal>

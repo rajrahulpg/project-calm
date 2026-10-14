@@ -29,7 +29,7 @@ export default function AnatomySection() {
       </div>
       <div className="relative max-w-3xl mx-auto px-6 md:px-12 text-center">
         <SectionReveal>
-          <h2 className="text-3xl sm:text-4xl md:text-[2.4rem] leading-[1.15] font-medium mb-6" style={{ color: "var(--color-heading)" }}>
+          <h2 className="text-3xl sm:text-4xl md:text-[3rem] leading-[1.15] font-semibold mb-6" style={{ color: "var(--color-heading)" }}>
             {ANATOMY.title}
           </h2>
           <p className="text-base sm:text-lg leading-relaxed mx-auto max-prose" style={{ color: "var(--color-text-muted)" }}>
@@ -38,7 +38,7 @@ export default function AnatomySection() {
         </SectionReveal>
       </div>
 
-      <div className="relative max-w-4xl mx-auto px-6 md:px-12 mt-10 grid sm:grid-cols-2 gap-6 items-stretch">
+      <div className="relative max-w-[1560px] mx-auto px-6 md:px-10 xl:px-14 mt-10 grid sm:grid-cols-2 gap-6 items-stretch">
         <SectionReveal delay={100} className="h-full">
           <div
             className="relative w-full h-full min-h-[240px] rounded-2xl overflow-hidden"

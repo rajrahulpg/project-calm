@@ -41,7 +41,7 @@ export default function Checklist() {
     <section style={{ background: "var(--color-bg-1)", padding: "var(--section-py) 0" }}>
       <div className="max-w-2xl mx-auto px-6 md:px-12">
         <SectionReveal>
-          <h2 className="text-3xl sm:text-4xl md:text-[2.4rem] font-medium mb-8 text-center" style={{ color: "var(--color-heading)" }}>
+          <h2 className="text-3xl sm:text-4xl md:text-[3rem] font-semibold mb-8 text-center" style={{ color: "var(--color-heading)" }}>
             {t.CHECKLIST_TITLE}
           </h2>
 
