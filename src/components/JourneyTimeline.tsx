@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Activity, BedDouble, Handshake, HeartPulse, ScanLine, Stethoscope, type LucideIcon } from "lucide-react";
+import JourneyGraphic from "./JourneyGraphic";
 import SectionReveal from "./SectionReveal";
 import { usePrefersReducedMotion } from "@/lib/hooks";
 import { useLanguage } from "@/lib/language";
@@ -139,15 +140,22 @@ export default function JourneyTimeline() {
                     boxShadow: state === "active" ? "0 24px 48px -32px var(--color-coral-glow)" : "none",
                   }}
                 >
-                  <span className="block text-[10px] font-semibold uppercase tracking-[0.2em] mb-2" style={{ color: "var(--color-coral)" }}>
-                    {t.UI.journey.progress(i + 1, total)}
-                  </span>
-                  <h3 className="text-xl font-medium" style={{ color: "var(--color-text)" }}>
-                    {step.title}
-                  </h3>
-                  <p className="mt-2 text-base leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
-                    {step.body}
-                  </p>
+                  <div className={`jg-row ${isLeft ? "jg-row-left" : ""}`}>
+                    <div className="jg-text">
+                      <span className="block text-[10px] font-semibold uppercase tracking-[0.2em] mb-2" style={{ color: "var(--color-coral)" }}>
+                        {t.UI.journey.progress(i + 1, total)}
+                      </span>
+                      <h3 className="text-xl font-medium" style={{ color: "var(--color-text)" }}>
+                        {step.title}
+                      </h3>
+                      <p className="mt-2 text-base leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
+                        {step.body}
+                      </p>
+                    </div>
+                    <div className="jg-side" style={{ opacity: state === "upcoming" ? 0.7 : 1 }}>
+                      <JourneyGraphic index={i} />
+                    </div>
+                  </div>
                 </div>
               </li>
             );

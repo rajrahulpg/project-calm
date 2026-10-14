@@ -319,3 +319,35 @@ html.lenis, html.lenis body { height: auto; }
   .draw-in { animation: none; stroke-dasharray: none; }
   .expand-grid, .book, .tilt-card, .parallax-layer, .carousel-track { transition: none; }
 }
+
+/* ── Journey step graphics ───────────────────────────────────────────── */
+.jg-ecg { stroke-dasharray: 100; stroke-dashoffset: 100; animation: jg-draw 2.6s ease-in-out infinite; }
+@keyframes jg-draw { 0% { stroke-dashoffset: 100; } 55%, 85% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -100; } }
+.jg-scan { animation: jg-sweep 2.8s ease-in-out infinite; }
+@keyframes jg-sweep { 0% { transform: translateX(6px); opacity: 0; } 15%, 85% { opacity: 1; } 100% { transform: translateX(90px); opacity: 0; } }
+.jg-meet-l { animation: jg-meet-l 3s ease-in-out infinite; }
+.jg-meet-r { animation: jg-meet-r 3s ease-in-out infinite; }
+@keyframes jg-meet-l { 0%, 100% { transform: translateX(-8px); } 50% { transform: translateX(4px); } }
+@keyframes jg-meet-r { 0%, 100% { transform: translateX(8px); } 50% { transform: translateX(-4px); } }
+.jg-tick { stroke-dasharray: 100; animation: jg-tick 3s ease-in-out infinite; }
+@keyframes jg-tick { 0%, 35% { stroke-dashoffset: 100; } 60%, 90% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 100; } }
+.jg-balloon { transform-box: fill-box; transform-origin: center; animation: jg-inflate 2.6s ease-in-out infinite; }
+@keyframes jg-inflate { 0%, 100% { transform: scale(0.55, 0.45); } 55%, 75% { transform: scale(1.35, 1.9); } }
+.jg-bar { transform-box: fill-box; transform-origin: bottom; animation: jg-grow 2.8s ease-in-out infinite backwards; }
+@keyframes jg-grow { 0%, 10% { transform: scaleY(0.15); opacity: 0.4; } 40%, 85% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(0.15); opacity: 0.4; } }
+.jg-heart { transform-box: fill-box; transform-origin: center; animation: jg-beat 1.5s ease-in-out infinite; }
+@keyframes jg-beat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.14); } 30% { transform: scale(1); } 45% { transform: scale(1.1); } }
+.jg-ring { transform-box: fill-box; transform-origin: center; animation: jg-ping 1.5s ease-out infinite; }
+@keyframes jg-ping { 0% { transform: scale(0.8); opacity: 0.8; } 100% { transform: scale(1.5); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .jg * { animation: none !important; }
+  .jg-ecg, .jg-tick { stroke-dashoffset: 0; }
+}
+.jg-row { display: flex; align-items: center; gap: 1.5rem; }
+.jg-text { min-width: 0; flex: 1 1 0%; }
+.jg-side { display: none; }
+@media (min-width: 768px) {
+  .jg-row { gap: 2rem; }
+  .jg-row-left { flex-direction: row-reverse; }
+  .jg-side { display: block; }
+}
