@@ -52,6 +52,8 @@ export default function Navbar() {
         backdropFilter: scrolled ? "blur(18px)" : "none",
         WebkitBackdropFilter: scrolled ? "blur(18px)" : "none",
         borderBottom: scrolled ? "1px solid var(--color-line)" : "1px solid transparent",
+        // Faint brand-red glow under the bar so it reads as a distinct header.
+        boxShadow: "0 6px 18px -6px rgba(234, 5, 43, 0.22)",
       }}
     >
       <nav className="flex items-center justify-between px-6 md:px-12 py-3" aria-label="Primary">
