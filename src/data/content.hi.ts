@@ -334,6 +334,11 @@ export const DOCTOR_INSIGHTS = {
   clearSearch: "खोज साफ़ करें",
   clearFilter: "फ़िल्टर हटाएँ",
   viewMore: "और देखें",
+  otherExperts: {
+    title: "अन्य विशेषज्ञों से जानें",
+    count: (videos: number, doctors: number) => `${doctors} और डॉक्टरों के ${videos} वीडियो`,
+    heading: "अन्य विशेषज्ञों से",
+  },
   dateLocale: "hi-IN",
 };
 

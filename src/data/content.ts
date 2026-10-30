@@ -335,6 +335,13 @@ export const DOCTOR_INSIGHTS = {
   clearSearch: "Clear search",
   clearFilter: "Clear Filter",
   viewMore: "View More",
+  // On a doctor's QR page: the tile that reveals everyone else's videos.
+  otherExperts: {
+    title: "Know From Other Experts",
+    count: (videos: number, doctors: number) =>
+      `${videos} ${videos === 1 ? "video" : "videos"} from ${doctors} more ${doctors === 1 ? "doctor" : "doctors"}`,
+    heading: "From Other Experts",
+  },
   dateLocale: "en-IN",
 };
 

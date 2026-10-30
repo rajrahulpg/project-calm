@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import { ChevronDown, Eye, Play, Search, ThumbsUp, X } from "lucide-react";
+import { ArrowRight, ChevronDown, Eye, Play, Search, ThumbsUp, X } from "lucide-react";
 import SectionReveal from "./SectionReveal";
 import { useLanguage } from "@/lib/language";
 import { doctorSlug, hasQr } from "@/lib/doctor-slug";
@@ -17,6 +17,8 @@ const SORT_KEYS: Exclude<SortKey, "default">[] = ["recent", "views"];
 // "View More" opens 6 at a time.
 const FIRST_PAGE = 12;
 const PAGE_STEP = 6;
+// Two per row on phones and tablets, three on desktop.
+const CARD_WIDTH = "w-[calc(50%-0.375rem)] sm:w-[calc(50%-0.625rem)] lg:w-[calc((100%-2.5rem)/3)]";
 
 const byRecent = (a: Video, b: Video) => b.uploaded.localeCompare(a.uploaded);
 const SORTERS: Record<SortKey, ((a: Video, b: Video) => number) | null> = {
@@ -130,10 +132,61 @@ function VideoCard({ video, big, onOpen }: { video: Video; big: boolean; onOpen:
   );
 }
 
+// Sits after a QR doctor's own videos, shaped like a VideoCard: a fan of other
+// doctors' thumbnails up top, and clicking it reveals their videos.
+function OtherExpertsTile({ previews, videoCount, doctorCount, onOpen }: {
+  previews: Video[]; videoCount: number; doctorCount: number; onOpen: () => void;
+}) {
+  const { t } = useLanguage();
+  const copy = t.DOCTOR_INSIGHTS.otherExperts;
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      className="group w-full h-full text-left rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-2"
+      style={{ background: "var(--color-coral-tint)", border: "1px solid var(--color-coral-soft)" }}
+    >
+      <div className="relative overflow-hidden" style={{ aspectRatio: "16 / 9" }} aria-hidden="true">
+        {previews.map((v, i) => (
+          <span
+            key={v.id}
+            className="absolute top-1/2 left-1/2 rounded-lg overflow-hidden transition-transform duration-500"
+            style={{
+              width: "46%",
+              aspectRatio: "16 / 9",
+              transform: `translate(-50%, -50%) translateX(${(i - (previews.length - 1) / 2) * 52}%) rotate(${(i - (previews.length - 1) / 2) * 6}deg)`,
+              zIndex: i === (previews.length - 1) / 2 ? 2 : 1,
+              border: "2px solid var(--color-card)",
+              boxShadow: "0 10px 24px -12px rgba(0,0,0,0.45)",
+            }}
+          >
+            <Image src={v.thumbnail} alt="" fill className="object-cover" sizes="160px" />
+          </span>
+        ))}
+        <span
+          className="absolute right-2 bottom-2 sm:right-3 sm:bottom-3 z-10 flex items-center justify-center w-7 h-7 sm:w-10 sm:h-10 rounded-full transition-transform duration-500 group-hover:translate-x-1"
+          style={{ background: "var(--color-coral)", boxShadow: "0 12px 24px -10px var(--color-coral-glow)" }}
+        >
+          <ArrowRight color="var(--color-on-accent)" className="w-3.5 h-3.5 sm:w-[18px] sm:h-[18px]" />
+        </span>
+      </div>
+      <div className="p-3 sm:p-5">
+        <p className="text-sm sm:text-base font-semibold leading-snug" style={{ color: "var(--color-coral)" }}>
+          {copy.title}
+        </p>
+        <p className="mt-1 text-[10px] sm:text-xs" style={{ color: "var(--color-text-muted)" }}>
+          {copy.count(videoCount, doctorCount)}
+        </p>
+      </div>
+    </button>
+  );
+}
+
 // `featuredSlug` is set on /resources/<doctor> (opened from that doctor's QR
 // code): their first video sits above the grid, larger — full width if it's
-// their only one — and the rest of their videos lead the grid. Searching or
-// sorting drops back to the plain grid.
+// their only one — and the rest of their videos fill the grid, followed by an
+// "other experts" tile that reveals everyone else's videos. Searching or
+// sorting drops back to the plain grid of every video.
 export default function DoctorInsights({ videos, featuredSlug }: { videos: Video[]; featuredSlug?: string }) {
   const { t, lang } = useLanguage();
   const DOCTOR_INSIGHTS = t.DOCTOR_INSIGHTS;
@@ -145,11 +198,13 @@ export default function DoctorInsights({ videos, featuredSlug }: { videos: Video
   const filterKey = `${query}|${sort}`;
   const [page, setPage] = useState({ key: filterKey, limit: FIRST_PAGE });
   const limit = page.key === filterKey ? page.limit : FIRST_PAGE;
+  // QR page only: whether the "other experts" tile has been opened.
+  const [showOthers, setShowOthers] = useState(false);
 
   // Every word typed must appear somewhere in the title or doctor name (in
   // either language), so "sarita", "har blockage" or "dr rao" all work.
   // Matching is substring, so "blockage" also finds the joined-up hashtag.
-  const { featured, featuredOnly, shown } = useMemo(() => {
+  const { featured, featuredOnly, theirsCount, others, shown } = useMemo(() => {
     const localize = (v: Video) => ({ ...v, doctor: lang === "hi" && v.doctorHi ? v.doctorHi : v.doctor });
     const words = query.toLowerCase().split(/\s+/).filter(Boolean);
     const list = videos.filter((v) => {
@@ -159,18 +214,65 @@ export default function DoctorInsights({ videos, featuredSlug }: { videos: Video
     const sorter = SORTERS[sort];
     const sorted = sorter ? [...list].sort(sorter) : list;
 
-    if (!featuredSlug || filtered) return { featured: null, featuredOnly: false, shown: sorted.map(localize) };
+    if (!featuredSlug || filtered) {
+      return { featured: null, featuredOnly: false, theirsCount: 0, others: [], shown: sorted.map(localize) };
+    }
     const isTheirs = (v: Video) => hasQr(v) && doctorSlug(v) === featuredSlug;
     const theirs = sorted.filter(isTheirs);
-    const others = sorted.filter((v) => !isTheirs(v));
+    const others = sorted.filter((v) => !isTheirs(v)).map(localize);
+    const theirsRest = theirs.slice(1).map(localize);
     return {
       featured: theirs[0] ? localize(theirs[0]) : null,
       featuredOnly: theirs.length === 1,
-      shown: [...theirs.slice(1), ...others].map(localize),
+      theirsCount: theirsRest.length,
+      others,
+      shown: showOthers ? [...theirsRest, ...others] : theirsRest,
     };
-  }, [videos, query, sort, lang, featuredSlug, filtered]);
+  }, [videos, query, sort, lang, featuredSlug, filtered, showOthers]);
   const visible = shown.slice(0, Math.max(0, limit - (featured ? 1 : 0)));
   const hiddenCount = shown.length - visible.length;
+  // On a QR page the grid splits in two: the doctor's own videos, then the
+  // other experts' under their own heading once the tile is opened.
+  const theirsVisible = visible.slice(0, theirsCount);
+  const othersVisible = visible.slice(theirsCount);
+  const showTile = featuredSlug && !filtered && !showOthers && others.length > 0 && hiddenCount === 0;
+
+  // One preview per doctor (up to three) for the tile's thumbnail fan.
+  const { previews, otherDoctorCount } = useMemo(() => {
+    const firstPerDoctor = new Map<string, Video>();
+    for (const v of others) if (!firstPerDoctor.has(doctorSlug(v))) firstPerDoctor.set(doctorSlug(v), v);
+    return { previews: [...firstPerDoctor.values()].slice(0, 3), otherDoctorCount: firstPerDoctor.size };
+  }, [others]);
+
+  const openOthers = () => {
+    setShowOthers(true);
+    // Room for the doctor's own videos plus the first few from other experts.
+    setPage({ key: filterKey, limit: (featured ? 1 : 0) + theirsCount + PAGE_STEP });
+  };
+
+  const renderGrid = (list: Video[], offset: number) => (
+    // Flex-wrap rather than a grid so a short last row (3 + 2, 2 + 1,
+    // a single search hit…) always sits centered, whatever the count.
+    <div className="flex flex-wrap justify-center gap-3 sm:gap-5">
+      {list.map((video, j) => {
+        const i = offset + j;
+        return (
+          <SectionReveal
+            key={video.id}
+            delay={(i < FIRST_PAGE ? i : (i - FIRST_PAGE) % PAGE_STEP) * 90}
+            className={CARD_WIDTH}
+          >
+            <VideoCard video={video} big={false} onOpen={setOpen} />
+          </SectionReveal>
+        );
+      })}
+      {offset === 0 && showTile && (
+        <SectionReveal delay={Math.min(list.length, FIRST_PAGE) * 90} className={CARD_WIDTH}>
+          <OtherExpertsTile previews={previews} videoCount={others.length} doctorCount={otherDoctorCount} onOpen={openOthers} />
+        </SectionReveal>
+      )}
+    </div>
+  );
 
   return (
     <section style={{ background: "var(--color-bg-0)", padding: "var(--section-py) 0" }}>
@@ -273,19 +375,17 @@ export default function DoctorInsights({ videos, featuredSlug }: { videos: Video
           </div>
         )}
 
-        {/* Flex-wrap rather than a grid so a short last row (3 + 2, 2 + 1,
-            a single search hit…) always sits centered, whatever the count. */}
-        <div className="flex flex-wrap justify-center gap-3 sm:gap-5">
-          {visible.map((video, i) => (
-            <SectionReveal
-              key={video.id}
-              delay={(i < FIRST_PAGE ? i : (i - FIRST_PAGE) % PAGE_STEP) * 90}
-              className="w-[calc(50%-0.375rem)] sm:w-[calc(50%-0.625rem)] lg:w-[calc((100%-2.5rem)/3)]"
-            >
-              <VideoCard video={video} big={false} onOpen={setOpen} />
-            </SectionReveal>
-          ))}
-        </div>
+        {(theirsVisible.length > 0 || showTile) && renderGrid(theirsVisible, 0)}
+
+        {othersVisible.length > 0 && featuredSlug && !filtered && (
+          <h3
+            className="modal-fade mt-12 sm:mt-16 mb-6 sm:mb-8 text-xl sm:text-2xl md:text-[1.75rem] font-semibold text-center"
+            style={{ color: "var(--color-heading)" }}
+          >
+            {DOCTOR_INSIGHTS.otherExperts.heading}
+          </h3>
+        )}
+        {othersVisible.length > 0 && renderGrid(othersVisible, theirsVisible.length)}
 
         {hiddenCount > 0 && (
           <div className="mt-10 flex justify-center">
