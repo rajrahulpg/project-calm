@@ -18,17 +18,19 @@ async function api(pin: string, init?: RequestInit & { query?: string }) {
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw Object.assign(new Error(data.error ?? "Something went wrong."), { status: res.status });
-  return data as { videos: DoctorVideo[]; results?: AddResult[]; id?: string };
+  return data as { videos: DoctorVideo[]; results?: AddResult[]; id?: string; storage?: Storage };
 }
 
 type AddResult = { input: string; ok: boolean; title?: string; error?: string };
+// Where the server keeps the list — see storageMode in lib/videos.
+type Storage = "database" | "file";
 
 // Links can be pasted one per line, or separated by spaces/commas.
 const splitLinks = (text: string) => text.split(/[\s,]+/).map((s) => s.trim()).filter(Boolean);
 
 const dateFmt = new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", year: "numeric" });
 
-function PinScreen({ onUnlock }: { onUnlock: (pin: string, videos: DoctorVideo[]) => void }) {
+function PinScreen({ onUnlock }: { onUnlock: (pin: string, videos: DoctorVideo[], storage?: Storage) => void }) {
   const [pin, setPin] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -39,8 +41,8 @@ function PinScreen({ onUnlock }: { onUnlock: (pin: string, videos: DoctorVideo[]
     setBusy(true);
     setError("");
     try {
-      const { videos } = await api(pin);
-      onUnlock(pin, videos);
+      const { videos, storage } = await api(pin);
+      onUnlock(pin, videos, storage);
     } catch (err) {
       setError((err as Error).message);
       setPin("");
@@ -408,6 +410,7 @@ function EditVideoModal({ pin, video, onSaved, onClose }: { pin: string; video: 
 export default function AdminPanel() {
   const [pin, setPin] = useState<string | null>(null);
   const [videos, setVideos] = useState<DoctorVideo[]>([]);
+  const [storage, setStorage] = useState<Storage>();
   const [adding, setAdding] = useState(false);
   const [notice, setNotice] = useState("");
   const [deleting, setDeleting] = useState<string | null>(null);
@@ -425,7 +428,7 @@ export default function AdminPanel() {
   };
 
   if (!pin) {
-    return <PinScreen onUnlock={(p, v) => { setPin(p); setVideos(v); }} />;
+    return <PinScreen onUnlock={(p, v, s) => { setPin(p); setVideos(v); setStorage(s); }} />;
   }
 
   // Order changes apply on screen immediately, then save; if the save fails
@@ -520,6 +523,13 @@ export default function AdminPanel() {
             <p className="text-sm mt-1" style={{ color: "var(--color-text-muted)" }}>
               {videos.length} {videos.length === 1 ? "video" : "videos"} in “Hear It From Your Doctors”
             </p>
+            {/* Lets whoever deploys the site confirm the database is connected. */}
+            {storage && (
+              <p className="text-xs mt-1 inline-flex items-center gap-1.5" style={{ color: "var(--color-text-muted)", opacity: 0.8 }}>
+                <span className="inline-block rounded-full" style={{ width: 7, height: 7, background: storage === "database" ? "#2E9E5B" : "#D9962E" }} />
+                {storage === "database" ? "Saved in: database" : "Saved in: data/doctor-videos.json (local file)"}
+              </p>
+            )}
             {videos.length > 1 && (
               <p className="text-xs mt-1 inline-flex items-center gap-1.5" style={{ color: "var(--color-text-muted)", opacity: 0.8 }}>
                 {savingOrder && <Loader2 size={11} className="animate-spin" />}

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import ResourcesPageBody from "@/components/ResourcesPageBody";
 import { RESOURCES_HERO } from "@/data/content";
-import { readVideos } from "@/lib/videos";
+import { readPublicVideos } from "@/lib/videos";
 
 export const metadata: Metadata = {
   title: "Resources & Support — Project CALM",
@@ -12,5 +12,5 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function ResourcesPage() {
-  return <ResourcesPageBody videos={await readVideos()} />;
+  return <ResourcesPageBody videos={await readPublicVideos()} />;
 }

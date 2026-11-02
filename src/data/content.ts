@@ -41,7 +41,6 @@ export const VIDEO_STORY_BEATS = [
 export const HERO = {
   headline: "Calcium in Your Arteries.\nUnderstand It, Then Act On It.",
   subline: "Clear answers, in plain language, before you decide what comes next.",
-  cta: "Explore Your Journey",
   scrollHint: "Scroll to Explore",
 };
 
@@ -351,34 +350,10 @@ export const COFFEE_TABLE_BOOK = {
   qrTitle: "Scanned a code from the book?\nYou're in the right place.",
 };
 
-export const TOOLS = [
-  {
-    key: "watch",
-    title: "Know What to Watch",
-    body: "Not sure how urgent it is? Check here.",
-  },
-  {
-    key: "find-care",
-    title: "Find Care Near You",
-    body: "See doctors and support based on your location.",
-  },
-  {
-    key: "language",
-    title: "Language",
-    body: "Read this site in your language.",
-  },
-  {
-    key: "talk",
-    title: "Talk to Someone",
-    body: "Connect with a care counsellor, anytime.",
-  },
-];
 
 export const CLOSING = {
   headline: "One Step at a Time.",
   body: "Every patient who's walked this path once felt exactly what you feel now, uncertain, a little afraid, unsure what comes next. Every one of them found their way through it. You don't have to manage this alone; your doctors, your family, and your care team are with you, one step at a time.",
-  cta: "Explore Your Next Step",
-  secondaryCta: "Talk to your Nearest Doctor",
 };
 
 export const DISCLAIMER =
@@ -495,15 +470,6 @@ export const UI = {
   },
   media: {
     close: "Close",
-  },
-  tools: {
-    title: "Tools to Help You Decide",
-    watchLink: 'Jump to "After the Procedure — What to Watch"',
-    findCarePlaceholder: "[Location-based directory to be added]",
-    languageLabel: "Language",
-    languageCurrent: "English",
-    languageComingSoon: "More languages coming soon",
-    talkPlaceholder: "[Care counsellor contact details to be added]",
   },
   riskCards: {
     doodleLabel: "must try!",

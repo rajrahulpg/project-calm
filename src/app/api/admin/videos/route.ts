@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { doctorSlug, hasQr, slugify } from "@/lib/doctor-slug";
-import { checkPin, fetchYouTubeVideo, parseYouTubeId, readVideos, writeVideos, type DoctorVideo } from "@/lib/videos";
+import { checkPin, fetchYouTubeVideo, parseYouTubeId, readVideos, storageMode, writeVideos, type DoctorVideo } from "@/lib/videos";
 
 // Every method re-checks the PIN on the server — the /admin page only
 // collects it, so these routes are what actually keep the list locked.
@@ -8,13 +8,32 @@ const unauthorized = () => NextResponse.json({ error: "Wrong PIN." }, { status: 
 
 const saveFailed = () =>
   NextResponse.json(
-    { error: "Couldn't save the video list on this server. On hosts with a read-only disk (like Vercel), the list needs a database instead of a file." },
+    {
+      error: storageMode() === "database"
+        ? "Couldn't save to the video database. Check the DB_ settings on the server (see DEPLOYMENT.md)."
+        : "Couldn't save the video list on this server. On hosts with a read-only disk, set up the database (see DEPLOYMENT.md).",
+    },
     { status: 500 },
   );
 
-export async function GET(req: NextRequest) {
+// Any other failure — almost always the database being unreachable — comes
+// back as a readable message for the admin panel instead of a bare 500.
+type Handler = (req: NextRequest) => Promise<Response>;
+const guarded = (handler: Handler): Handler => async (req) => {
+  try {
+    return await handler(req);
+  } catch (e) {
+    console.error("Admin video request failed:", e);
+    return NextResponse.json(
+      { error: "Couldn't reach the video database. Check the DB_ settings on the server (see DEPLOYMENT.md)." },
+      { status: 500 },
+    );
+  }
+};
+
+async function handleGET(req: NextRequest) {
   if (!checkPin(req.headers.get("x-admin-pin"))) return unauthorized();
-  return NextResponse.json({ videos: await readVideos() });
+  return NextResponse.json({ videos: await readVideos(), storage: storageMode() });
 }
 
 export type AddResult = { input: string; ok: boolean; title?: string; error?: string };
@@ -61,7 +80,7 @@ function qrSlugFor(doctor: string, videos: DoctorVideo[], exceptId?: string) {
 // first video's): every video in the upload is filed under that one doctor
 // and slug, so the whole batch shares a single QR code. With it off, the
 // videos are kept off every QR page.
-export async function POST(req: NextRequest) {
+async function handlePOST(req: NextRequest) {
   if (!checkPin(req.headers.get("x-admin-pin"))) return unauthorized();
 
   const { urls, qrDoctor } = (await req.json().catch(() => ({}))) as { urls?: string[]; qrDoctor?: string };
@@ -93,7 +112,7 @@ export async function POST(req: NextRequest) {
 
 // Takes { order: string[] } — every video id, in the new order. This order
 // is what the Resources page shows when no sort filter is selected.
-export async function PUT(req: NextRequest) {
+async function handlePUT(req: NextRequest) {
   if (!checkPin(req.headers.get("x-admin-pin"))) return unauthorized();
 
   const { order } = (await req.json().catch(() => ({}))) as { order?: string[] };
@@ -112,7 +131,7 @@ export async function PUT(req: NextRequest) {
   return NextResponse.json({ videos: next });
 }
 
-export async function DELETE(req: NextRequest) {
+async function handleDELETE(req: NextRequest) {
   if (!checkPin(req.headers.get("x-admin-pin"))) return unauthorized();
 
   const id = req.nextUrl.searchParams.get("id");
@@ -136,7 +155,7 @@ export async function DELETE(req: NextRequest) {
 // - addUrls: more links filed under the same doctor, QR setting and slug,
 //   placed right after this video.
 // The slug is otherwise never changed: it's the link inside a printed QR.
-export async function PATCH(req: NextRequest) {
+async function handlePATCH(req: NextRequest) {
   if (!checkPin(req.headers.get("x-admin-pin"))) return unauthorized();
 
   const body = (await req.json().catch(() => ({}))) as {
@@ -184,3 +203,9 @@ export async function PATCH(req: NextRequest) {
   }
   return NextResponse.json({ videos: next, results: publicResults(results), id: updated.id });
 }
+
+export const GET = guarded(handleGET);
+export const POST = guarded(handlePOST);
+export const PUT = guarded(handlePUT);
+export const DELETE = guarded(handleDELETE);
+export const PATCH = guarded(handlePATCH);
