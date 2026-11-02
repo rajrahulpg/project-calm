@@ -14,6 +14,8 @@ if (typeof window !== "undefined") {
 // How much of the scroll range the opening headline stays visible for,
 // before it fades out completely.
 const HERO_FADE_END = 0.06;
+// The scroll cue goes first — gone after the first nudge of the wheel.
+const HINT_FADE_END = 0.012;
 // The story captions only start fading in once the headline is fully gone —
 // a clean handoff instead of a cross-dissolve where both are half-visible.
 const CAPTION_FADE_END = HERO_FADE_END + 0.05;
@@ -23,6 +25,7 @@ export default function ScrollVideo() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
+  const hintRef = useRef<HTMLDivElement>(null);
   const captionLayerRef = useRef<HTMLDivElement>(null);
   const targetProgress = useRef(0);
   const smoothProgress = useRef(0);
@@ -124,6 +127,9 @@ export default function ScrollVideo() {
         heroRef.current.style.opacity = String(heroOpacity);
         heroRef.current.style.transform = `translateY(${(1 - heroOpacity) * -24}px)`;
         heroRef.current.style.pointerEvents = heroOpacity > 0.05 ? "auto" : "none";
+      }
+      if (hintRef.current) {
+        hintRef.current.style.opacity = String(Math.max(0, 1 - smoothProgress.current / HINT_FADE_END));
       }
       if (captionLayerRef.current) {
         const captionOpacity =
@@ -230,14 +236,34 @@ export default function ScrollVideo() {
             >
               {t.HERO.subline}
             </p>
+          </div>
+        )}
 
-            <div className="mt-9 flex items-center justify-center gap-6">
-              <a
-                href="#understanding"
-                className="btn-accent inline-flex items-center px-7 py-3.5 rounded-full text-[12px] font-semibold uppercase tracking-[0.14em]"
+        {/* Scroll cue — a mouse with a rolling dot, fading out as soon as the
+            visitor scrolls. Outer div: scroll fade; inner: the entrance. */}
+        {!reducedMotion && (
+          <div
+            ref={hintRef}
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 bottom-6 sm:bottom-8 z-10 flex justify-center"
+            style={{ willChange: "opacity" }}
+          >
+            <div className="scroll-hint-in flex flex-col items-center gap-2.5">
+              <span
+                className="relative block rounded-full"
+                style={{ width: 22, height: 34, border: "1.5px solid rgba(245,245,242,0.75)", boxShadow: "0 2px 12px rgba(0,0,0,0.45)" }}
               >
-                {t.HERO.cta}
-              </a>
+                <span
+                  className="scroll-hint-dot absolute left-1/2 top-[7px] block rounded-full"
+                  style={{ width: 4, height: 7, marginLeft: -2, background: "#F5F5F2" }}
+                />
+              </span>
+              <span
+                className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.2em]"
+                style={{ color: "rgba(245,245,242,0.8)", textShadow: "0 2px 8px rgba(0,0,0,0.8)" }}
+              >
+                {t.HERO.scrollHint}
+              </span>
             </div>
           </div>
         )}

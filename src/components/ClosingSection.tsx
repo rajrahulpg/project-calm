@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { PhoneCall } from "lucide-react";
+import { Video } from "lucide-react";
 import SectionReveal from "./SectionReveal";
 import { AuroraBlobs } from "./HeroBackdrop";
 import { useLanguage } from "@/lib/language";
@@ -29,20 +29,13 @@ export default function ClosingSection() {
         </SectionReveal>
 
         <SectionReveal delay={300}>
-          <div className="mt-11 flex flex-col sm:flex-row items-center justify-center gap-5">
+          <div className="mt-11 flex items-center justify-center">
             <Link
-              href="/"
-              className="btn-accent inline-flex items-center px-8 py-3.5 rounded-full text-[12px] font-semibold uppercase tracking-[0.14em]"
+              href="/resources#doctor-videos"
+              className="btn-accent inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-[12px] font-semibold uppercase tracking-[0.14em]"
             >
-              {CLOSING.cta}
-            </Link>
-            <Link
-              href="#talk-to-someone"
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-[12px] font-semibold uppercase tracking-[0.14em] transition-all hover:-translate-y-0.5"
-              style={{ border: "1px solid var(--color-line)", color: "var(--color-text)", background: "var(--color-card)" }}
-            >
-              <PhoneCall size={14} />
-              {CLOSING.secondaryCta}
+              <Video size={15} />
+              {t.UI.navbar.talkToSomeone}
             </Link>
           </div>
         </SectionReveal>

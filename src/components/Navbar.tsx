@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, PhoneCall, X } from "lucide-react";
+import { Menu, Video, X } from "lucide-react";
 import { useLanguage } from "@/lib/language";
 import SiteLogo, { SiteHashtag } from "./SiteLogo";
 import ThemeToggle from "./ThemeToggle";
@@ -98,10 +98,10 @@ export default function Navbar() {
           <LanguageToggle />
           <ThemeToggle />
           <Link
-            href="/resources#talk-to-someone"
+            href="/resources#doctor-videos"
             className="btn-accent inline-flex items-center gap-1.5 px-5 py-3 text-[10px] uppercase tracking-[0.18em] font-semibold rounded-full"
           >
-            <PhoneCall size={13} />
+            <Video size={13} />
             {t.UI.navbar.talkToSomeone}
           </Link>
         </div>
@@ -142,11 +142,11 @@ export default function Navbar() {
             );
           })}
           <Link
-            href="/resources#talk-to-someone"
+            href="/resources#doctor-videos"
             onClick={() => setOpen(false)}
             className="btn-accent mt-2 inline-flex items-center justify-center gap-2 px-5 py-3 text-[11px] uppercase tracking-[0.18em] font-semibold rounded-full"
           >
-            <PhoneCall size={14} />
+            <Video size={14} />
             {t.UI.navbar.talkToSomeone}
           </Link>
         </div>

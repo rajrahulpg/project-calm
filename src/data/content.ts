@@ -42,7 +42,7 @@ export const HERO = {
   headline: "Calcium in Your Arteries.\nUnderstand It, Then Act On It.",
   subline: "Clear answers, in plain language, before you decide what comes next.",
   cta: "Explore Your Journey",
-  scrollHint: "Scroll to understand",
+  scrollHint: "Scroll to Explore",
 };
 
 export const HASHTAG_REVEAL = {

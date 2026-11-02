@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { PhoneCall } from "lucide-react";
+import { Video } from "lucide-react";
 import { useLanguage } from "@/lib/language";
 import { useHorizontalTraceMask, usePrefersReducedMotion } from "@/lib/hooks";
 import SiteLogo, { SiteHashtag } from "./SiteLogo";
@@ -49,10 +49,10 @@ export default function Footer() {
           <LanguageToggle />
           <ThemeToggle />
           <Link
-            href="/resources#talk-to-someone"
+            href="/resources#doctor-videos"
             className="btn-accent inline-flex items-center gap-1 sm:gap-1.5 whitespace-nowrap px-3 sm:px-5 py-2 sm:py-3 text-[8px] sm:text-[10px] uppercase tracking-[0.1em] sm:tracking-[0.18em] font-semibold rounded-full"
           >
-            <PhoneCall size={12} />
+            <Video size={12} />
             {UI.navbar.talkToSomeone}
           </Link>
         </div>

@@ -3,7 +3,6 @@ import PageHero from "./PageHero";
 import HashtagReveal from "./HashtagReveal";
 import DoctorInsights from "./DoctorInsights";
 import CoffeeTableBook from "./CoffeeTableBook";
-import ToolsGrid from "./ToolsGrid";
 import ClosingSection from "./ClosingSection";
 import ReferencesSection from "./ReferencesSection";
 import MedicalDisclaimer from "./MedicalDisclaimer";
@@ -21,7 +20,6 @@ export default function ResourcesPageBody({ videos, featuredSlug }: { videos: Do
       <HashtagReveal />
       <DoctorInsights videos={videos} featuredSlug={featuredSlug} />
       <CoffeeTableBook />
-      <ToolsGrid />
       <ClosingSection />
       <ReferencesSection />
       <MedicalDisclaimer />

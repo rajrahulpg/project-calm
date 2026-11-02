@@ -78,12 +78,42 @@
 }
 
 .btn-accent {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   background: var(--color-coral);
   color: #FFFFFF;
   box-shadow: 0 16px 32px -16px var(--color-coral-glow);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s;
+  animation: btn-breathe 3.6s ease-in-out infinite;
 }
-.btn-accent:hover { transform: translateY(-2px); box-shadow: 0 22px 40px -18px var(--color-coral-glow); }
+.btn-accent:hover { transform: translateY(-2px); box-shadow: 0 22px 40px -18px var(--color-coral-glow); animation-play-state: paused; }
+
+/* A soft band of light that drifts across every few seconds — slow enough
+   to catch the eye without nagging. */
+.btn-accent::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.32) 50%, transparent 70%);
+  transform: translateX(-120%);
+  animation: btn-sheen 5s ease-in-out infinite;
+}
+/* The glow underneath swells and settles, like a slow breath. */
+@keyframes btn-breathe {
+  0%, 100% { box-shadow: 0 16px 32px -16px var(--color-coral-glow); }
+  50%      { box-shadow: 0 18px 38px -14px var(--color-coral-glow); }
+}
+/* The sweep takes the first ~40% of the cycle, then rests off-button. */
+@keyframes btn-sheen {
+  0%        { transform: translateX(-120%); }
+  40%, 100% { transform: translateX(120%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-accent, .btn-accent::after { animation: none; }
+}
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -298,6 +328,21 @@ html.lenis, html.lenis body { height: auto; }
 
 /* ── Pointer parallax layers (hero backdrops) ────────────────────────── */
 .parallax-layer { transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform; }
+
+/* ── Hero scroll cue ─────────────────────────────────────────────────── */
+/* Rises in a beat after the headline, then the dot keeps rolling down. */
+@keyframes scroll-hint-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.scroll-hint-in { animation: scroll-hint-in 0.8s ease-out 0.9s both; }
+@keyframes scroll-hint-dot {
+  0%   { opacity: 0; transform: translateY(0); }
+  20%  { opacity: 1; }
+  70%  { opacity: 1; transform: translateY(10px); }
+  100% { opacity: 0; transform: translateY(12px); }
+}
+.scroll-hint-dot { animation: scroll-hint-dot 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
 
 /* ── Modal ───────────────────────────────────────────────────────────── */
 @keyframes modal-fade { from { opacity: 0; } to { opacity: 1; } }

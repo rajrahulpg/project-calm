@@ -275,7 +275,7 @@ export default function DoctorInsights({ videos, featuredSlug }: { videos: Video
   );
 
   return (
-    <section style={{ background: "var(--color-bg-0)", padding: "var(--section-py) 0" }}>
+    <section id="doctor-videos" className="scroll-mt-20" style={{ background: "var(--color-bg-0)", padding: "var(--section-py) 0" }}>
       <div className="max-w-[1560px] mx-auto px-6 md:px-10 xl:px-14">
         <SectionReveal>
           <h2 className="text-3xl sm:text-4xl md:text-[3rem] font-semibold mb-3 text-center" style={{ color: "var(--color-heading)" }}>
