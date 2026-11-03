@@ -8,8 +8,8 @@ import SectionReveal from "./SectionReveal";
 import { usePrefersReducedMotion } from "@/lib/hooks";
 import { useLanguage } from "@/lib/language";
 
-const COVER_SRC = "/assets/book-pages/page-01.jpg";
-const PDF_SRC = "/assets/Coffe%20Table%20Book_Single%20page_v2.pdf";
+const COVER_SRC = "/assets/book-final/page-01.jpg";
+const PDF_SRC = "/assets/Project-CALM-Coffee-Table-Book.pdf";
 
 function Book({ onOpen }: { onOpen: () => void }) {
   const { t } = useLanguage();
@@ -38,7 +38,7 @@ function Book({ onOpen }: { onOpen: () => void }) {
         aria-hidden="true"
       />
       <div className="relative book-scene cursor-pointer select-none" onMouseMove={onMove} onMouseLeave={onLeave} onClick={onOpen} style={{ padding: 20 }}>
-        <div className="book" style={{ width: 280, height: 431, transform: "rotateY(-10deg)" }} role="button" aria-label={hint}>
+        <div className="book" style={{ width: 280, height: 396, transform: "rotateY(-10deg)" }} role="button" aria-label={hint}>
           <div
             className="absolute inset-0 rounded-lg overflow-hidden"
             style={{ boxShadow: "0 30px 60px -30px rgba(0,0,0,0.6)" }}

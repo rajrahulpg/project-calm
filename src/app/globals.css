@@ -310,6 +310,22 @@ html.lenis, html.lenis body { height: auto; }
 .book-scene { perspective: 1400px; }
 .book { position: relative; transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
 
+/* ── Book reader popup ───────────────────────────────────────────────── */
+/* Where each page curves into the spine: a soft shadow on the inner edge
+   (right edge of a left page, left edge of a right page), like an open book.
+   StPageFlip tags each page --left / --right as it lays them out. */
+.book-page-shade { position: absolute; inset: 0; pointer-events: none; }
+.book-flipbook .stf__item.--left .book-page-shade {
+  background: linear-gradient(to left, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.08) 3%, rgba(0,0,0,0) 10%);
+}
+.book-flipbook .stf__item.--right .book-page-shade {
+  background: linear-gradient(to right, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.08) 3%, rgba(0,0,0,0) 10%);
+}
+/* The cover and back page are stiff board — no inner curl shadow. */
+.book-flipbook .stf__item[data-density="hard"] .book-page-shade { background: none; }
+/* The open book sits on the dark backdrop with a soft drop shadow. */
+.book-reader .stf__block { filter: drop-shadow(0 30px 40px rgba(0,0,0,0.45)); }
+
 .tilt-card {
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s, box-shadow 0.5s;
   transform-style: preserve-3d;
